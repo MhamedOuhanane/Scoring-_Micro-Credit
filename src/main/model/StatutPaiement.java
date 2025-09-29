@@ -1,4 +1,19 @@
 package main.model;
 
-public class StatutPaiement {
+public enum StatutPaiement {
+    PAYEATEMPS("Délai de paiement"),
+    ENRETARD("Retard"),
+    PAYEENRETARD("Paiement tardif"),
+    IMPAYENONREGLE("Impayé, non réglementé"),
+    IMPAYEREGLE("Impayé");
+
+    private final String description;
+
+    StatutPaiement(String description) {
+        this.description = description;
+    }
+
+    public String getDescription() {
+        return description;
+    }
 }
