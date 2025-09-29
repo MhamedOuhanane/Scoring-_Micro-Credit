@@ -1,4 +1,4 @@
-package main.model;
+package main.enums;
 
 public enum EnumDecision {
     ACCORDIMMEDIAT("Accord instantané"),
