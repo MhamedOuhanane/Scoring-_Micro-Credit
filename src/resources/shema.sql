@@ -28,7 +28,6 @@ CREATE TABLE IF NOT EXISTS professionnel (
     immatriculationFiscale DECIMAL(10, 2) NOT NULL,
     secteurActivite VARCHAR(255) NOT NULL,
     Activite VARCHAR(255) NOT NULL,
-    secteur ENUM("PUBLIC", "GRANDE_ENTREPRISE", "PME") NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS credit (
