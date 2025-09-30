@@ -71,7 +71,42 @@ public class ProfessionnelRepositoryImpl implements ProfessionnelRepository {
 
     @Override
     public Optional<Professionnel> updateProfessionnel(Integer id, Map<String, Object> updates) {
-        return Optional.empty();
+        Map<String, List<String>> attributesAccount = new HashMap<>();
+        Map<String, Object> listUpdatesPerson = new HashMap<>();
+        attributesAccount.put("person", new ArrayList<String>(Arrays.asList("nom", "prenom", "email", "dateNaissance", "ville", "nombreEnfants", "investissement", "placement", "situationFamiliale", "createdAt", "score")));
+        attributesAccount.put("professionnel", new ArrayList<String>(Arrays.asList("revenu", "immatriculationFiscale", "secteurActivite", "Activite")));
+
+        StringBuilder updatePerfoQuery = new StringBuilder("UPDATE professionnel SET ");
+
+        boolean updatePerson = false;
+        int i = 0;
+        for (String key : updates.keySet()) {
+            if (attributesAccount.get("person").contains(key)) {
+                listUpdatesPerson.put(key, updates.get(key));
+                updatePerson = true;
+            }
+            if (attributesAccount.get("professionnel").contains(key)) updatePerfoQuery.append(key).append(" = ?, ");
+            i++;
+        }
+        String updatePerfoQueryStr = updatePerfoQuery.substring(0, updatePerfoQuery.length() -2);
+        updatePerfoQueryStr += " WHERE id = ?";
+
+        try {
+            if (updatePerson) personRepository.updatePerson(id, listUpdatesPerson).orElseThrow(RuntimeException::new);
+            PreparedStatement pstmt = conn.prepareStatement(updatePerfoQueryStr);
+            i = 1;
+            for (String key : updates.keySet()) {
+                if (attributesAccount.get("professionnel").contains(key)) pstmt.setObject(i++, updates.get(key));
+            }
+            pstmt.setInt(i, id);
+            int rowsAff = pstmt.executeUpdate();
+            if (rowsAff > 0 ) {
+                return this.findProfessionnel(id);
+            }
+            return Optional.empty();
+        } catch (SQLException e) {
+            throw new DatabaseException(e.getMessage(), e);
+        }
     }
 
     @Override

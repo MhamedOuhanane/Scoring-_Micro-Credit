@@ -92,7 +92,7 @@ public class EmployeRepositoryImp  implements EmployeRepository {
         }
         String updateEmpQueryStr = updateEmpQuery.substring(0, updateEmpQuery.length() -2);
         updateEmpQueryStr += " WHERE id = ?";
-        System.out.println("Emplo: " + updateEmpQueryStr);
+
         try {
             if (updatePerson) personRepository.updatePerson(id, updatesPerson).orElseThrow(RuntimeException::new);
             PreparedStatement pstmt = conn.prepareStatement(updateEmpQueryStr);
