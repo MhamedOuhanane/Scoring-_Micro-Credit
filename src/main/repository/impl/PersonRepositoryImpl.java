@@ -9,6 +9,7 @@ import main.utils.DatabaseException;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.Optional;
 
 public class PersonRepositoryImpl implements PersonRepository {
@@ -77,6 +78,36 @@ public class PersonRepositoryImpl implements PersonRepository {
             throw new DatabaseException(e.getMessage(), e);
         }
     }
+
+    @Override
+    public Optional<Person> updatePerson(Integer id, Map<String, Object> updates) {
+        StringBuilder updateQuery = new StringBuilder("UPDATE person SET ");
+        int i = 0;
+        for (String key : updates.keySet()) {
+            updateQuery.append(key).append(" = ?");
+            if (i < updates.size() - 1) {
+                updateQuery.append(", ");
+            }
+            i++;
+        }
+        updateQuery.append(" WHERE id = ?");
+        try (PreparedStatement pstmt = conn.prepareStatement(updateQuery.toString())) {
+            i = 1;
+            for (Object value : updates.values()) {
+                pstmt.setObject(i++, value);
+            }
+            pstmt.setInt(i, id);
+
+            int rowsAff = pstmt.executeUpdate();
+            if (rowsAff > 0 ) {
+                return this.findPerson(id);
+            }
+            return Optional.empty();
+        } catch (SQLException e) {
+            throw new DatabaseException(e.getMessage(), e);
+        }
+    }
+
 
     @Override
     public Boolean deletePerson(Person person) {
