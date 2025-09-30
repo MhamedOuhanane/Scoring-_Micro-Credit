@@ -44,16 +44,11 @@ public class Main {
         try {
 //            professionnel = professionnelRepository.inserProfessionnel(professionnel).orElseThrow(() -> new RuntimeException("Le professionnel est vide"));
 //            System.out.println("Le compte est ajouter avec success id : " + professionnel.getId() + " | Email: " + professionnel.getEmail());
-//            professionnel = professionnelRepository.findProfessionnel(1).orElseThrow((RuntimeException::new));
+            professionnel = professionnelRepository.findProfessionnel(1).orElseThrow((RuntimeException::new));
             List<Professionnel> professionnels = professionnelRepository.selectProfessionnels();
             professionnels.forEach(professionnel1 -> System.out.println("id : " + professionnel1.getId() + " | " + professionnel1.getEmail() + " | nom " + professionnel1.getNom() +  " | ville " + professionnel1.getVille() +  " | secteurActivite " + professionnel1.getSecteurActivite() + " | situationFamiliale " + professionnel1.getSituationFamiliale() + " | Activite: " + professionnel1.getActivite()));
-            Map<String , Object> updates = new HashMap<>();
-            updates.put("nom", "Hajk");
-            updates.put("ville", "Maroc");
-            updates.put("secteurActivite", "Activite");
-            updates.put("Activite", "IKL");
-            updates.put("situationFamiliale", "VEUF");
-            Professionnel po = professionnelRepository.updateProfessionnel(1, updates).orElseThrow(RuntimeException::new);
+
+            boolean po = professionnelRepository.deleteProfessionnel(professionnel);
             professionnels = professionnelRepository.selectProfessionnels();
             professionnels.forEach(professionnel1 -> System.out.println("id : " + professionnel1.getId() + " | " + professionnel1.getEmail() + " | nom " + professionnel1.getNom() +  " | ville " + professionnel1.getVille() +  " | secteurActivite " + professionnel1.getSecteurActivite() + " | situationFamiliale " + professionnel1.getSituationFamiliale() + " | Activite: " + professionnel1.getActivite()));
         } catch (RuntimeException e) {

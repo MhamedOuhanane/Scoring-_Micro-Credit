@@ -145,6 +145,18 @@ public class ProfessionnelRepositoryImpl implements ProfessionnelRepository {
 
     @Override
     public Boolean deleteProfessionnel(Professionnel professionnel) {
-        return null;
+        String deleteQuery = "DELETE FROM professionnel WHERE id = ?";
+        try {
+            boolean deletePerson = personRepository.deletePerson(professionnel);
+            if (deletePerson) {
+                PreparedStatement pstmt = conn.prepareStatement(deleteQuery);
+                pstmt.setInt(1, professionnel.getId());
+                int rowsAff = pstmt.executeUpdate();
+                return rowsAff > 0;
+            }
+            return false;
+        } catch (SQLException e) {
+            throw new DatabaseException(e.getMessage(), e);
+        }
     }
 }
