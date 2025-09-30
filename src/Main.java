@@ -1,8 +1,10 @@
 import main.config.DatabaseConfig;
+import main.enums.EnumSecteur;
 import main.enums.EnumSitFam;
+import main.model.Employe;
 import main.model.Person;
-import main.repository.impl.PersonRepositoryImpl;
-import main.repository.interfaces.PersonRepository;
+import main.repository.impl.EmployeRepositoryImp;
+import main.repository.interfaces.EmployeRepository;
 
 import java.sql.Connection;
 import java.time.LocalDate;
@@ -12,11 +14,11 @@ import java.time.LocalDateTime;
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
-        PersonRepository personRepository = new PersonRepositoryImpl();
-        Person person = new Person(
+        EmployeRepository employeRepository = new EmployeRepositoryImp();
+        Employe employe = new Employe(
                 "Dupont",
                 "Jean",
-                "jean.dupont@example.com",
+                "jean.dupontt@example.com",
                 LocalDate.of(1990, 5, 15),
                 "Paris",
                 2,
@@ -24,21 +26,18 @@ public class Main {
                 false,
                 EnumSitFam.MARIE,
                 LocalDateTime.now(),
-                85
+                85,
+                6000.,
+                5,
+                "Informateur",
+                "CDI",
+                EnumSecteur.PME
         );
 
         try {
-//            person = personRepository.inserPerson(person).orElseThrow(() -> new RuntimeException("Le person est vide"));
-//            System.out.println("Insertion valid");
-            Person newPerson = personRepository.findAccount(1).orElseThrow(() -> new RuntimeException("Le person est vide"));
-            System.out.println("find person: " + newPerson.getNom() + newPerson.getEmail());
-            Boolean deletePerson = personRepository.deleteAccount(newPerson);
-            if (deletePerson) {
-                System.out.println("suppression valide");
-            } else {
+            employe = employeRepository.inserEmploye(employe).orElseThrow(() -> new RuntimeException("Le employe est vide"));
 
-                System.out.println("suppression invalide!");
-            }
+            System.out.println("Insertion valid, id " + employe.getId() + " " + employe.getSalaire());
         } catch (RuntimeException e) {
             System.out.println("Erreur : " + e.getMessage());
         }

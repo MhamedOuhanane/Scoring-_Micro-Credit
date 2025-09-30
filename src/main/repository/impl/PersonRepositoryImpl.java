@@ -4,6 +4,7 @@ import main.config.DatabaseConfig;
 import main.enums.EnumSitFam;
 import main.model.Person;
 import main.repository.interfaces.PersonRepository;
+import main.utils.DatabaseException;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -11,7 +12,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 public class PersonRepositoryImpl implements PersonRepository {
-    private final Connection conn = DatabaseConfig.getInstance().getConnection();
+    protected final Connection conn = DatabaseConfig.getInstance().getConnection();
 
     @Override
     public Optional<Person> inserPerson(Person person) {
@@ -43,12 +44,12 @@ public class PersonRepositoryImpl implements PersonRepository {
             }
             return Optional.empty();
         } catch (SQLException e) {
-            throw new RuntimeException(e.getMessage(), e);
+            throw new DatabaseException(e.getMessage(), e);
         }
     }
 
     @Override
-    public Optional<Person> findAccount(Integer person_id) {
+    public Optional<Person> findPerson(Integer person_id) {
         String findQuery = "SELECT * FROM person WHERE id = ?";
         try (PreparedStatement pstmt = conn.prepareStatement(findQuery)) {
             pstmt.setInt(1, person_id);
@@ -73,19 +74,19 @@ public class PersonRepositoryImpl implements PersonRepository {
             }
             return Optional.empty();
         } catch (SQLException e) {
-            throw new RuntimeException("Erreur SQL lors de trouver du person:" + e.getMessage(), e);
+            throw new DatabaseException(e.getMessage(), e);
         }
     }
 
     @Override
-    public Boolean deleteAccount(Person person) {
+    public Boolean deletePerson(Person person) {
         String deleteQuery = "DELETE FROM person WHERE id = ?";
         try (PreparedStatement pstmt = conn.prepareStatement(deleteQuery)) {
             pstmt.setInt(1, person.getId());
             int rowsAff = pstmt.executeUpdate();
             return rowsAff > 0;
         } catch (SQLException e) {
-            throw new RuntimeException("Erreur SQL lors de suppression de person: " + e.getMessage(), e);
+            throw new DatabaseException(e.getMessage(), e);
         }
     }
 }
