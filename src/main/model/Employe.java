@@ -13,6 +13,10 @@ public class Employe extends Person{
     private String typeContrat;
     private EnumSecteur secteur;
 
+    public Employe(Integer id, String nom, String prenom, String email, LocalDate dateNaissance, String ville, Integer nombreEnfants, Boolean investissement, Boolean placement, EnumSitFam situationFamiliale, LocalDateTime createdAt, Integer score) {
+        super(id, nom, prenom, email, dateNaissance, ville, nombreEnfants, investissement, placement, situationFamiliale, createdAt, score);
+    }
+
     public Employe(Integer id, String nom, String prenom, String email, LocalDate dateNaissance, String ville, Integer nombreEnfants,
                    Boolean investissement, Boolean placement, EnumSitFam situationFamiliale, LocalDateTime createdAt, Integer score,
                    Double salaire, Integer anciennete, String poste, String typeContrat, EnumSecteur secteur

@@ -1,15 +1,18 @@
 package main.repository.impl;
 
+import main.enums.EnumSecteur;
+import main.enums.EnumSitFam;
 import main.model.Employe;
+import main.model.Person;
 import main.repository.interfaces.EmployeRepository;
 import main.utils.DatabaseException;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.*;
 
 public class EmployeRepositoryImp extends PersonRepositoryImpl implements EmployeRepository {
     @Override
@@ -36,14 +39,34 @@ public class EmployeRepositoryImp extends PersonRepositoryImpl implements Employ
                 return Optional.of(newEmploye);
             }
             return Optional.empty();
-        } catch (SQLException e) {
+        } catch (SQLException | RuntimeException e) {
             throw new DatabaseException("Erreur SQL lors d'insertion du employe:" + e.getMessage(), e);
         }
     }
 
     @Override
     public Optional<Employe> findEmploye(Integer id) {
-        return Optional.empty();
+        String findQurey = "SELECT * FROM employe WHERE id = ?";
+        try {
+            Person person = this.findPerson(id).orElseThrow(RuntimeException::new);
+            Employe employe = new Employe(person.getId(), person.getNom(), person.getPrenom(), person.getEmail(), person.getDateNaissance(), person.getVille(), person.getNombreEnfants(), person.getInvestissement(), person.getPlacement(), person.getSituationFamiliale(), person.getCreatedAt(), person.getScore());
+            PreparedStatement pstmt = conn.prepareStatement(findQurey);
+            pstmt.setInt(1, id);
+
+            ResultSet resultSet = pstmt.executeQuery();
+            if (resultSet.next()) {
+                employe.setSalaire(resultSet.getDouble("salaire"));
+                employe.setAnciennete(resultSet.getInt("anciennete"));
+                employe.setPoste(resultSet.getString("poste"));
+                employe.setTypeContrat(resultSet.getString("typeContrat"));
+                employe.setSecteur(EnumSecteur.valueOf(resultSet.getString("secteur")));
+
+                return Optional.of(employe);
+            }
+            return Optional.empty();
+        } catch (SQLException | RuntimeException e) {
+            throw new DatabaseException(e.getMessage(), e);
+        }
     }
 
     @Override
@@ -53,7 +76,37 @@ public class EmployeRepositoryImp extends PersonRepositoryImpl implements Employ
 
     @Override
     public List<Employe> selectEmployes() {
-        return Collections.emptyList();
+        String selectQurey = "SELECT * FROM person p JOIN employe e ON p.id = e.id";
+        try (PreparedStatement pstmt = conn.prepareStatement(selectQurey)){
+            ResultSet resultSet = pstmt.executeQuery();
+            List<Employe> employes = new ArrayList<>();
+            while (resultSet.next()) {
+                Integer id = resultSet.getInt("id");
+                String nom = resultSet.getString("nom");
+                String prenom = resultSet.getString("prenom");
+                String email = resultSet.getString("email");
+                LocalDate dateNaissance = resultSet.getDate("dateNaissance").toLocalDate();
+                String ville = resultSet.getString("ville");
+                Integer nombreEnfants = resultSet.getInt("nombreEnfants");
+                Boolean investissement = resultSet.getBoolean("investissement");
+                Boolean placement = resultSet.getBoolean("placement");
+                EnumSitFam situationFamiliale = EnumSitFam.valueOf(resultSet.getString("situationFamiliale"));
+                LocalDateTime createdAt = resultSet.getTimestamp("createdAt").toLocalDateTime();
+                Integer score = resultSet.getInt("score");
+                Double salaire = resultSet.getDouble("salaire");
+                Integer anciennete = resultSet.getInt("anciennete");
+                String poste = resultSet.getString("poste");
+                String typeContrat = resultSet.getString("typeContrat");
+                EnumSecteur secteur = EnumSecteur.valueOf(resultSet.getString("secteur"));
+
+                employes.add(new Employe(id, nom, prenom, email, dateNaissance, ville, nombreEnfants,
+                        investissement, placement, situationFamiliale, createdAt, score,
+                        salaire, anciennete, poste, typeContrat, secteur));
+            }
+            return employes;
+        } catch (SQLException e) {
+            throw new DatabaseException(e.getMessage(), e);
+        }
     }
 
     @Override

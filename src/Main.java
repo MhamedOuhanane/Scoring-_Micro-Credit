@@ -9,6 +9,7 @@ import main.repository.interfaces.EmployeRepository;
 import java.sql.Connection;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -18,7 +19,7 @@ public class Main {
         Employe employe = new Employe(
                 "Dupont",
                 "Jean",
-                "jean.dupontt@example.com",
+                "jean.duponttu@example.com",
                 LocalDate.of(1990, 5, 15),
                 "Paris",
                 2,
@@ -36,8 +37,12 @@ public class Main {
 
         try {
             employe = employeRepository.inserEmploye(employe).orElseThrow(() -> new RuntimeException("Le employe est vide"));
-
-            System.out.println("Insertion valid, id " + employe.getId() + " " + employe.getSalaire());
+//            employe = employeRepository.findEmploye(7).orElseThrow(RuntimeException::new);
+            List<Employe> employes = employeRepository.selectEmployes();
+            employes.forEach(employe1 ->
+                System.out.println("Insertion valid, id " + employe1.getId() + " " + employe1.getSalaire() + " | email:" +  employe1.getEmail())
+            );
+            System.out.println(employes);
         } catch (RuntimeException e) {
             System.out.println("Erreur : " + e.getMessage());
         }
