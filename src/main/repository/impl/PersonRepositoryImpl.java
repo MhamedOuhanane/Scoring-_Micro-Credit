@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.Optional;
 
 public class PersonRepositoryImpl implements PersonRepository {
-    protected final Connection conn = DatabaseConfig.getInstance().getConnection();
+    private final Connection conn = DatabaseConfig.getInstance().getConnection();
 
     @Override
     public Optional<Person> inserPerson(Person person) {

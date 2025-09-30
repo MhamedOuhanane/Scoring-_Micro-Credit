@@ -19,7 +19,8 @@ CREATE TABLE IF NOT EXISTS employe (
     anciennete INT NOT NULL,
     poste VARCHAR(100) NOT NULL,
     typeContrat VARCHAR(255) NOT NULL,
-    secteur ENUM("PUBLIC", "GRANDE_ENTREPRISE", "PME") NOT NULL
+    secteur ENUM("PUBLIC", "GRANDE_ENTREPRISE", "PME") NOT NULL,
+    FOREIGN KEY (id) REFERENCES person(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS professionnel (
@@ -28,6 +29,7 @@ CREATE TABLE IF NOT EXISTS professionnel (
     immatriculationFiscale DECIMAL(10, 2) NOT NULL,
     secteurActivite VARCHAR(255) NOT NULL,
     Activite VARCHAR(255) NOT NULL,
+    FOREIGN KEY (id) REFERENCES person(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS credit (

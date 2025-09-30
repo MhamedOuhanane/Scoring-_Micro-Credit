@@ -1,13 +1,15 @@
 package main.repository.impl;
 
+import main.config.DatabaseConfig;
 import main.enums.EnumSecteur;
 import main.enums.EnumSitFam;
 import main.model.Employe;
 import main.model.Person;
 import main.repository.interfaces.EmployeRepository;
+import main.repository.interfaces.PersonRepository;
 import main.utils.DatabaseException;
 
-import java.security.Key;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,14 +17,17 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
-public class EmployeRepositoryImp extends PersonRepositoryImpl implements EmployeRepository {
+public class EmployeRepositoryImp  implements EmployeRepository {
+    private final Connection conn = DatabaseConfig.getInstance().getConnection();
+    private final PersonRepository personRepository = new PersonRepositoryImpl();
+
     @Override
     public Optional<Employe> inserEmploye(Employe employe) {
         String insertQuery = "INSERT INTO employe (id, salaire, anciennete, poste, typeContrat, secteur) VALUES (?, ?, ?, ?, ?, ?)";
         try {
-            Employe newEmploye = (Employe) this.inserPerson(employe).orElseThrow(RuntimeException::new);
+            Person person = personRepository.inserPerson(employe).orElseThrow(RuntimeException::new);
             PreparedStatement pstmt = conn.prepareStatement(insertQuery);
-            pstmt.setInt(1, newEmploye.getId());
+            pstmt.setInt(1, person.getId());
             pstmt.setDouble(2, employe.getSalaire());
             pstmt.setInt(3, employe.getAnciennete());
             pstmt.setString(4, employe.getPoste());
@@ -31,11 +36,7 @@ public class EmployeRepositoryImp extends PersonRepositoryImpl implements Employ
 
             int rowsAff = pstmt.executeUpdate();
             if (rowsAff > 0) {
-                newEmploye.setSalaire(employe.getSalaire());
-                newEmploye.setAnciennete(employe.getAnciennete());
-                newEmploye.setPoste(employe.getPoste());
-                newEmploye.setTypeContrat(employe.getTypeContrat());
-                newEmploye.setSecteur(employe.getSecteur());
+                Employe newEmploye = this.findEmploye(person.getId()).orElseThrow(RuntimeException::new);
 
                 return Optional.of(newEmploye);
             }
@@ -49,7 +50,7 @@ public class EmployeRepositoryImp extends PersonRepositoryImpl implements Employ
     public Optional<Employe> findEmploye(Integer id) {
         String findQurey = "SELECT * FROM employe WHERE id = ?";
         try {
-            Person person = this.findPerson(id).orElseThrow(RuntimeException::new);
+            Person person = personRepository.findPerson(id).orElseThrow(RuntimeException::new);
             Employe employe = new Employe(person.getId(), person.getNom(), person.getPrenom(), person.getEmail(), person.getDateNaissance(), person.getVille(), person.getNombreEnfants(), person.getInvestissement(), person.getPlacement(), person.getSituationFamiliale(), person.getCreatedAt(), person.getScore());
             PreparedStatement pstmt = conn.prepareStatement(findQurey);
             pstmt.setInt(1, id);
@@ -93,7 +94,7 @@ public class EmployeRepositoryImp extends PersonRepositoryImpl implements Employ
         updateEmpQueryStr += " WHERE id = ?";
         System.out.println("Emplo: " + updateEmpQueryStr);
         try {
-            if (updatePerson) this.updatePerson(id, updatesPerson).orElseThrow(RuntimeException::new);
+            if (updatePerson) personRepository.updatePerson(id, updatesPerson).orElseThrow(RuntimeException::new);
             PreparedStatement pstmt = conn.prepareStatement(updateEmpQueryStr);
             i = 1;
             for (String key : updates.keySet()) {
@@ -149,7 +150,7 @@ public class EmployeRepositoryImp extends PersonRepositoryImpl implements Employ
     public Boolean deleteEmploye(Employe employe) {
         String deleteQuery = "DELETE FROM employe WHERE id = ?";
         try {
-            boolean deletePerson = this.deletePerson(employe);
+            boolean deletePerson = personRepository.deletePerson(employe);
             if (deletePerson) {
                 PreparedStatement pstmt = conn.prepareStatement(deleteQuery);
                 pstmt.setInt(1, employe.getId());
