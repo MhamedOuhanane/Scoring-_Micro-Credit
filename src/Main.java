@@ -9,7 +9,10 @@ import main.repository.interfaces.EmployeRepository;
 import java.sql.Connection;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -36,13 +39,25 @@ public class Main {
         );
 
         try {
-            employe = employeRepository.inserEmploye(employe).orElseThrow(() -> new RuntimeException("Le employe est vide"));
+//            employe = employeRepository.inserEmploye(employe).orElseThrow(() -> new RuntimeException("Le employe est vide"));
 //            employe = employeRepository.findEmploye(7).orElseThrow(RuntimeException::new);
-            List<Employe> employes = employeRepository.selectEmployes();
-            employes.forEach(employe1 ->
-                System.out.println("Insertion valid, id " + employe1.getId() + " " + employe1.getSalaire() + " | email:" +  employe1.getEmail())
-            );
-            System.out.println(employes);
+//            List<Employe> employes = employeRepository.selectEmployes();
+//            employes.forEach(employe1 ->
+//            );
+            System.out.println("Insertion valid, id " + employe.getId() + " " + employe.getSalaire() + " | email:" +  employe.getEmail());
+//            System.out.println(employes);
+//            Map<String, Object> updates = new HashMap<>();
+//            updates.put("salaire", 90000.);
+//            updates.put("poste", "Doctor");
+//            updates.put("secteur", EnumSecteur.GRANDE_ENTREPRISE.toString());
+//            updates.put("placement", true);
+//            updates.put("dateNaissance", LocalDate.of(2000, 4, 30));
+//
+//            Employe newEmp = employeRepository.updateEmploye(8, updates).get();
+//            System.out.println("Insertion valid, id " + newEmp.getId() + " | " + newEmp.getSalaire() + " | " + newEmp.getPoste() + " | " + newEmp.getSecteur().getDescription() + " | " + newEmp.getPlacement() + " | " + newEmp.getDateNaissance() );
+            Employe newEmpl = employeRepository.findEmploye(8).get();
+            if (employeRepository.deleteEmploye(newEmpl)) System.out.println("Suppression valid");
+            else System.out.println("Suppression inValid");
         } catch (RuntimeException e) {
             System.out.println("Erreur : " + e.getMessage());
         }

@@ -91,6 +91,8 @@ public class PersonRepositoryImpl implements PersonRepository {
             i++;
         }
         updateQuery.append(" WHERE id = ?");
+
+        System.out.println("Pers: " + updateQuery.toString());
         try (PreparedStatement pstmt = conn.prepareStatement(updateQuery.toString())) {
             i = 1;
             for (Object value : updates.values()) {

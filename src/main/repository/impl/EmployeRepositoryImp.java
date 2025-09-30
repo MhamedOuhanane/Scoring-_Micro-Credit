@@ -7,6 +7,7 @@ import main.model.Person;
 import main.repository.interfaces.EmployeRepository;
 import main.utils.DatabaseException;
 
+import java.security.Key;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -70,8 +71,43 @@ public class EmployeRepositoryImp extends PersonRepositoryImpl implements Employ
     }
 
     @Override
-    public Optional<Employe> updateEmploye(Integer id, Map<String, Object> update) {
-        return Optional.empty();
+    public Optional<Employe> updateEmploye(Integer id, Map<String, Object> updates) {
+        Map<String, List<String>> attributesAccount = new HashMap<>();
+        Map<String, Object> updatesPerson = new HashMap<>();
+        attributesAccount.put("person", new ArrayList<String>(Arrays.asList("nom", "prenom", "email", "dateNaissance", "ville", "nombreEnfants", "investissement", "placement", "situationFamiliale", "createdAt", "score")));
+        attributesAccount.put("employe", new ArrayList<String>(Arrays.asList("salaire", "anciennete", "poste", "typeContrat", "secteur")));
+
+        StringBuilder updateEmpQuery = new StringBuilder("UPDATE employe SET ");
+
+        boolean updatePerson = false;
+        int i = 0;
+        for (String key : updates.keySet()) {
+            if (attributesAccount.get("person").contains(key)) {
+                updatesPerson.put(key, updates.get(key));
+                updatePerson = true;
+            }
+            if (attributesAccount.get("employe").contains(key)) updateEmpQuery.append(key).append(" = ?, ");
+            i++;
+        }
+        String updateEmpQueryStr = updateEmpQuery.substring(0, updateEmpQuery.length() -2);
+        updateEmpQueryStr += " WHERE id = ?";
+        System.out.println("Emplo: " + updateEmpQueryStr);
+        try {
+            if (updatePerson) this.updatePerson(id, updatesPerson).orElseThrow(RuntimeException::new);
+            PreparedStatement pstmt = conn.prepareStatement(updateEmpQueryStr);
+            i = 1;
+            for (String key : updates.keySet()) {
+                if (attributesAccount.get("employe").contains(key)) pstmt.setObject(i++, updates.get(key));
+            }
+            pstmt.setInt(i, id);
+            int rowsAff = pstmt.executeUpdate();
+            if (rowsAff > 0 ) {
+                return this.findEmploye(id);
+            }
+            return Optional.empty();
+        } catch (SQLException e) {
+            throw new DatabaseException(e.getMessage(), e);
+        }
     }
 
     @Override
@@ -111,6 +147,18 @@ public class EmployeRepositoryImp extends PersonRepositoryImpl implements Employ
 
     @Override
     public Boolean deleteEmploye(Employe employe) {
-        return null;
+        String deleteQuery = "DELETE FROM employe WHERE id = ?";
+        try {
+            boolean deletePerson = this.deletePerson(employe);
+            if (deletePerson) {
+                PreparedStatement pstmt = conn.prepareStatement(deleteQuery);
+                pstmt.setInt(1, employe.getId());
+                int rowsAff = pstmt.executeUpdate();
+                return rowsAff > 0;
+            }
+            return false;
+        } catch (SQLException e) {
+            throw new DatabaseException(e.getMessage(), e);
+        }
     }
 }
