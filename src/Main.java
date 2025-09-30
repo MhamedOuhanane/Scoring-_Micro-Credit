@@ -1,11 +1,15 @@
 import main.config.DatabaseConfig;
+import main.enums.EnumDecision;
 import main.enums.EnumSecteur;
 import main.enums.EnumSitFam;
+import main.model.Credit;
 import main.model.Employe;
 import main.model.Person;
 import main.model.Professionnel;
+import main.repository.impl.CreditRepositoryImpl;
 import main.repository.impl.EmployeRepositoryImp;
 import main.repository.impl.ProfessionnelRepositoryImpl;
+import main.repository.interfaces.CreditRepository;
 import main.repository.interfaces.EmployeRepository;
 import main.repository.interfaces.ProfessionnelRepository;
 
@@ -22,35 +26,15 @@ import java.util.Objects;
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
-        ProfessionnelRepository professionnelRepository = new ProfessionnelRepositoryImpl();
-        Professionnel professionnel = new Professionnel(
-                "Dupont",
-                "Jean",
-                "jean.dupodnttuws@example.com",
-                LocalDate.of(1990, 5, 15),
-                "Paris",
-                2,
-                true,
-                false,
-                EnumSitFam.MARIE,
-                LocalDateTime.now(),
-                85,
-                6000.,
-                400.,
-                "Informateur",
-                "CDI"
-        );
+        CreditRepository creditRepository = new CreditRepositoryImpl();
+        Credit credit = new Credit(LocalDateTime.now(), 15000., 12000., 0.05, 6, "Arich", EnumDecision.ACCORDIMMEDIAT, 3);
 
         try {
-//            professionnel = professionnelRepository.inserProfessionnel(professionnel).orElseThrow(() -> new RuntimeException("Le professionnel est vide"));
-//            System.out.println("Le compte est ajouter avec success id : " + professionnel.getId() + " | Email: " + professionnel.getEmail());
-            professionnel = professionnelRepository.findProfessionnel(1).orElseThrow((RuntimeException::new));
-            List<Professionnel> professionnels = professionnelRepository.selectProfessionnels();
-            professionnels.forEach(professionnel1 -> System.out.println("id : " + professionnel1.getId() + " | " + professionnel1.getEmail() + " | nom " + professionnel1.getNom() +  " | ville " + professionnel1.getVille() +  " | secteurActivite " + professionnel1.getSecteurActivite() + " | situationFamiliale " + professionnel1.getSituationFamiliale() + " | Activite: " + professionnel1.getActivite()));
+            Credit credit1 = creditRepository.inserCredit(credit).orElseThrow(RuntimeException::new);
+            System.out.println("Insertion valid. id: " + credit1.getId() + " | date: " + credit1.getDateCredit() + " | decision: " + credit1.getDecision().getDescription());
+            Credit credit2 = creditRepository.findCredit(2).get();
+            System.out.println("InseSelection valid. id: " + credit2.getId() + " | date: " + credit2.getDateCredit() + " | decision: " + credit2.getDecision().getDescription());
 
-            boolean po = professionnelRepository.deleteProfessionnel(professionnel);
-            professionnels = professionnelRepository.selectProfessionnels();
-            professionnels.forEach(professionnel1 -> System.out.println("id : " + professionnel1.getId() + " | " + professionnel1.getEmail() + " | nom " + professionnel1.getNom() +  " | ville " + professionnel1.getVille() +  " | secteurActivite " + professionnel1.getSecteurActivite() + " | situationFamiliale " + professionnel1.getSituationFamiliale() + " | Activite: " + professionnel1.getActivite()));
         } catch (RuntimeException e) {
             System.out.println("Erreur : " + e.getCause().getMessage());
         }
