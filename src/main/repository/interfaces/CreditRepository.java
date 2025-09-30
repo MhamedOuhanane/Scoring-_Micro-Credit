@@ -12,4 +12,6 @@ public interface CreditRepository {
     Optional<Credit> updateCredit(Integer id, Map<String, Object> update);
     List<Credit> selectCredits();
     Boolean deleteCredit(Credit credit);
+
+    List<Credit> selectPersonCredits(Integer id);
 }

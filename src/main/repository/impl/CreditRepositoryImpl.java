@@ -130,4 +130,30 @@ public class CreditRepositoryImpl implements CreditRepository {
             throw new DatabaseException(e.getMessage(), e);
         }
     }
+
+    @Override
+    public List<Credit> selectPersonCredits(Integer id) {
+        String selectQuery = "SELECT * FROM credit WHERE person_id = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(selectQuery)){
+            stmt.setInt(1, id);
+            ResultSet resultSet = stmt.executeQuery();
+            List<Credit> credits = new ArrayList<>();
+            while (resultSet.next()) {
+                Integer creditId = resultSet.getInt("id");
+                LocalDateTime dateCredit = resultSet.getTimestamp("dateCredit").toLocalDateTime();
+                Double montantDemande = resultSet.getDouble("montantDemande");
+                Double montantOctroye = resultSet.getDouble("montantOctroye");
+                Double tauxInteret = resultSet.getDouble("tauxInteret");
+                Integer dureeenMois = resultSet.getInt("dureeenMois");
+                String typeCredit = resultSet.getString("typeCredit");
+                EnumDecision decision = EnumDecision.valueOf(resultSet.getString("decision"));
+                Integer person_id = resultSet.getInt("person_id");
+
+                credits.add(new Credit(creditId, dateCredit, montantDemande, montantOctroye, tauxInteret, dureeenMois, typeCredit, decision, person_id));
+            }
+            return credits;
+        } catch (SQLException e) {
+            throw new DatabaseException(e.getMessage(), e);
+        }
+    }
 }
