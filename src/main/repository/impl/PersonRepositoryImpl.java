@@ -44,7 +44,7 @@ public class PersonRepositoryImpl implements PersonRepository {
                 return Optional.of(person);
             }
             return Optional.empty();
-        } catch (SQLException e) {
+        } catch (SQLException | RuntimeException e) {
             throw new DatabaseException(e.getMessage(), e);
         }
     }
@@ -74,7 +74,7 @@ public class PersonRepositoryImpl implements PersonRepository {
                 return Optional.of(person);
             }
             return Optional.empty();
-        } catch (SQLException e) {
+        } catch (SQLException | RuntimeException e) {
             throw new DatabaseException(e.getMessage(), e);
         }
     }
@@ -105,7 +105,7 @@ public class PersonRepositoryImpl implements PersonRepository {
                 return this.findPerson(id);
             }
             return Optional.empty();
-        } catch (SQLException e) {
+        } catch (SQLException | RuntimeException e) {
             throw new DatabaseException(e.getMessage(), e);
         }
     }
@@ -118,7 +118,7 @@ public class PersonRepositoryImpl implements PersonRepository {
             pstmt.setInt(1, person.getId());
             int rowsAff = pstmt.executeUpdate();
             return rowsAff > 0;
-        } catch (SQLException e) {
+        } catch (SQLException | RuntimeException e) {
             throw new DatabaseException(e.getMessage(), e);
         }
     }

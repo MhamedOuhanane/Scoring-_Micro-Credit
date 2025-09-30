@@ -36,6 +36,10 @@ public class Professionnel extends Person{
         this.Activite = Activite;
     }
 
+    public Professionnel(Integer id, String nom, String prenom, String email, LocalDate dateNaissance, String ville, Integer nombreEnfants, Boolean investissement, Boolean placement, EnumSitFam situationFamiliale, LocalDateTime createdAt, Integer score) {
+        super(id, nom, prenom, email, dateNaissance, ville, nombreEnfants, investissement, placement, situationFamiliale, createdAt, score);
+    }
+
     public Double getRevenu() {
         return revenu;
     }
