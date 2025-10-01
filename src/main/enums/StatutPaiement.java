@@ -4,7 +4,7 @@ public enum StatutPaiement {
     PAYEATEMPS("Délai de paiement"),
     ENRETARD("Retard"),
     PAYEENRETARD("Paiement tardif"),
-    IMPAYENONREGLE("Impayé, non réglementé"),
+    IMPAYENONREGLE("Impayé non réglementé"),
     IMPAYEREGLE("Impayé");
 
     private final String description;
