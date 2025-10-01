@@ -67,7 +67,7 @@ public class CreditRepositoryImpl implements CreditRepository {
     }
 
     @Override
-    public Optional<Credit> updateCredit(Integer id, Map<String, Object> updates) {
+    public Optional<Credit> updateCredit(Credit credit, Map<String, Object> updates) {
         StringBuilder updateQuery = new StringBuilder("UPDATE credit SET ");
         int i = 0;
         for (String key : updates.keySet()) {
@@ -81,11 +81,11 @@ public class CreditRepositoryImpl implements CreditRepository {
             for (Object value : updates.values()) {
                 pstmt.setObject(i++, value);
             }
-            pstmt.setInt(i, id);
+            pstmt.setInt(i, credit.getId());
 
             int rowsAff = pstmt.executeUpdate();
             if (rowsAff > 0) {
-                return this.findCredit(id);
+                return this.findCredit(credit.getId());
             }
             return Optional.empty();
         } catch (SQLException e) {

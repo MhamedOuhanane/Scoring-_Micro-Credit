@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface ProfessionnelRepository {
     Optional<Professionnel> insertProfessionnel(Professionnel professionnel);
     Optional<Professionnel> findProfessionnel(Integer id);
-    Optional<Professionnel> updateProfessionnel(Integer id, Map<String, Object> updates);
+    Optional<Professionnel> updateProfessionnel(Professionnel prof, Map<String, Object> updates);
     List<Professionnel> selectProfessionnels();
     Boolean deleteProfessionnel(Professionnel professionnel);
 }

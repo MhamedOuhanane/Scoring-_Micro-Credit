@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface CreditRepository {
     Optional<Credit> insertCredit(Credit credit);
     Optional<Credit> findCredit(Integer id);
-    Optional<Credit> updateCredit(Integer id, Map<String, Object> update);
+    Optional<Credit> updateCredit(Credit cred, Map<String, Object> update);
     List<Credit> selectCredits();
     Boolean deleteCredit(Credit credit);
     List<Credit> selectPersonCredits(Integer id);

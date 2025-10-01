@@ -80,7 +80,7 @@ public class PersonRepositoryImpl implements PersonRepository {
     }
 
     @Override
-    public Optional<Person> updatePerson(Integer id, Map<String, Object> updates) {
+    public Optional<Person> updatePerson(Person person, Map<String, Object> updates) {
         StringBuilder updateQuery = new StringBuilder("UPDATE person SET ");
         int i = 0;
         for (String key : updates.keySet()) {
@@ -97,11 +97,11 @@ public class PersonRepositoryImpl implements PersonRepository {
             for (Object value : updates.values()) {
                 pstmt.setObject(i++, value);
             }
-            pstmt.setInt(i, id);
+            pstmt.setInt(i, person.getId());
 
             int rowsAff = pstmt.executeUpdate();
             if (rowsAff > 0 ) {
-                return this.findPerson(id);
+                return this.findPerson(person.getId());
             }
             return Optional.empty();
         } catch (SQLException | RuntimeException e) {

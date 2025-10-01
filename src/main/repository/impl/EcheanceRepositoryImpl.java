@@ -61,7 +61,7 @@ public class EcheanceRepositoryImpl implements EcheanceRepository {
     }
 
     @Override
-    public Optional<Echeance> updateEcheance(Integer id, Map<String, Object> updates) {
+    public Optional<Echeance> updateEcheance(Echeance echeance, Map<String, Object> updates) {
         StringBuilder updateQuery = new StringBuilder("UPDATE echeance SET ");
         int i = 0;
         for (String key : updates.keySet()) {
@@ -75,11 +75,11 @@ public class EcheanceRepositoryImpl implements EcheanceRepository {
             for (Object value : updates.values()) {
                 pstmt.setObject(i++, value);
             }
-            pstmt.setInt(i, id);
+            pstmt.setInt(i, echeance.getId());
 
             int rowsAff = pstmt.executeUpdate();
             if (rowsAff > 0) {
-                return this.findEcheance(id);
+                return this.findEcheance(echeance.getId());
             }
             return Optional.empty();
         } catch (SQLException e) {

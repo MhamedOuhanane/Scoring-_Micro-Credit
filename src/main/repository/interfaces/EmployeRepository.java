@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface EmployeRepository {
     Optional<Employe> insertEmploye(Employe employe);
     Optional<Employe> findEmploye(Integer id);
-    Optional<Employe> updateEmploye(Integer id, Map<String, Object> update);
+    Optional<Employe> updateEmploye(Employe empl, Map<String, Object> update);
     List<Employe> selectEmployes();
     Boolean deleteEmploye(Employe employe);
 }

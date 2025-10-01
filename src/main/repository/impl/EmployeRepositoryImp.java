@@ -72,7 +72,7 @@ public class EmployeRepositoryImp  implements EmployeRepository {
     }
 
     @Override
-    public Optional<Employe> updateEmploye(Integer id, Map<String, Object> updates) {
+    public Optional<Employe> updateEmploye(Employe employe, Map<String, Object> updates) {
         Map<String, List<String>> attributesAccount = new HashMap<>();
         Map<String, Object> updatesPerson = new HashMap<>();
         attributesAccount.put("person", new ArrayList<String>(Arrays.asList("nom", "prenom", "email", "dateNaissance", "ville", "nombreEnfants", "investissement", "placement", "situationFamiliale", "createdAt", "score")));
@@ -94,16 +94,16 @@ public class EmployeRepositoryImp  implements EmployeRepository {
         updateEmpQueryStr += " WHERE id = ?";
 
         try {
-            if (updatePerson) personRepository.updatePerson(id, updatesPerson).orElseThrow(RuntimeException::new);
+            if (updatePerson) personRepository.updatePerson(employe, updatesPerson).orElseThrow(RuntimeException::new);
             PreparedStatement pstmt = conn.prepareStatement(updateEmpQueryStr);
             i = 1;
             for (String key : updates.keySet()) {
                 if (attributesAccount.get("employe").contains(key)) pstmt.setObject(i++, updates.get(key));
             }
-            pstmt.setInt(i, id);
+            pstmt.setInt(i, employe.getId());
             int rowsAff = pstmt.executeUpdate();
             if (rowsAff > 0 ) {
-                return this.findEmploye(id);
+                return this.findEmploye(employe.getId());
             }
             return Optional.empty();
         } catch (SQLException e) {

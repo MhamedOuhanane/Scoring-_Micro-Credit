@@ -69,7 +69,7 @@ public class ProfessionnelRepositoryImpl implements ProfessionnelRepository {
     }
 
     @Override
-    public Optional<Professionnel> updateProfessionnel(Integer id, Map<String, Object> updates) {
+    public Optional<Professionnel> updateProfessionnel(Professionnel professionnel, Map<String, Object> updates) {
         Map<String, List<String>> attributesAccount = new HashMap<>();
         Map<String, Object> listUpdatesPerson = new HashMap<>();
         attributesAccount.put("person", new ArrayList<String>(Arrays.asList("nom", "prenom", "email", "dateNaissance", "ville", "nombreEnfants", "investissement", "placement", "situationFamiliale", "createdAt", "score")));
@@ -91,16 +91,16 @@ public class ProfessionnelRepositoryImpl implements ProfessionnelRepository {
         updatePerfoQueryStr += " WHERE id = ?";
 
         try {
-            if (updatePerson) personRepository.updatePerson(id, listUpdatesPerson).orElseThrow(RuntimeException::new);
+            if (updatePerson) personRepository.updatePerson(professionnel, listUpdatesPerson).orElseThrow(RuntimeException::new);
             PreparedStatement pstmt = conn.prepareStatement(updatePerfoQueryStr);
             i = 1;
             for (String key : updates.keySet()) {
                 if (attributesAccount.get("professionnel").contains(key)) pstmt.setObject(i++, updates.get(key));
             }
-            pstmt.setInt(i, id);
+            pstmt.setInt(i, professionnel.getId());
             int rowsAff = pstmt.executeUpdate();
             if (rowsAff > 0 ) {
-                return this.findProfessionnel(id);
+                return this.findProfessionnel(professionnel.getId());
             }
             return Optional.empty();
         } catch (SQLException e) {
