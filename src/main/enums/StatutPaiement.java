@@ -5,7 +5,7 @@ public enum StatutPaiement {
     ENRETARD("Retard"),
     PAYEENRETARD("Paiement tardif"),
     IMPAYENONREGLE("Impayé non réglementé"),
-    IMPAYEREGLE("Impayé");
+    IMPAYEREGLE("Impayé réglé");
 
     private final String description;
 

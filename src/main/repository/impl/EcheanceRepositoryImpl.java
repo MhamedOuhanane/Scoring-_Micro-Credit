@@ -65,8 +65,30 @@ public class EcheanceRepositoryImpl implements EcheanceRepository {
     }
 
     @Override
-    public Optional<Echeance> updateEcheance(Integer id, Map<String, Object> update) {
-        return Optional.empty();
+    public Optional<Echeance> updateEcheance(Integer id, Map<String, Object> updates) {
+        StringBuilder updateQuery = new StringBuilder("UPDATE echeance SET ");
+        int i = 0;
+        for (String key : updates.keySet()) {
+            updateQuery.append(key).append(" = ?, ");
+        }
+        updateQuery = new StringBuilder(updateQuery.substring(0, updateQuery.length() - 2));
+        updateQuery.append(" WHERE id = ?");
+
+        try (PreparedStatement pstmt = conn.prepareStatement(updateQuery.toString())){
+            i = 1;
+            for (Object value : updates.values()) {
+                pstmt.setObject(i++, value);
+            }
+            pstmt.setInt(i, id);
+
+            int rowsAff = pstmt.executeUpdate();
+            if (rowsAff > 0) {
+                return this.findEcheance(id);
+            }
+            return Optional.empty();
+        } catch (SQLException e) {
+            throw new DatabaseException(e.getMessage(), e);
+        }
     }
 
     @Override
@@ -93,11 +115,36 @@ public class EcheanceRepositoryImpl implements EcheanceRepository {
 
     @Override
     public Boolean deleteEcheance(Echeance echeance) {
-        return null;
+        String deleteQuery = "DELETE FROM echeance WHERE id = ?";
+        try (PreparedStatement pstmt = conn.prepareStatement(deleteQuery)){
+            pstmt.setInt(1, echeance.getId());
+            int rowsAff = pstmt.executeUpdate();
+            return rowsAff > 0;
+        } catch (SQLException e) {
+            throw new DatabaseException(e.getMessage(), e);
+        }
     }
 
     @Override
     public List<Echeance> selectCreditEcheances(Integer id) {
-        return Collections.emptyList();
+        String findQurey = "SELECT * FROM echeance WHERE credit_id = ?";
+        try (PreparedStatement pstmt = conn.prepareStatement(findQurey)) {
+            pstmt.setInt(1, id);
+            ResultSet resultSet = pstmt.executeQuery();
+            List<Echeance> echeances = new ArrayList<>();
+            while (resultSet.next()) {
+                Integer echeanceId = resultSet.getInt("id");
+                LocalDateTime dateEcheance = resultSet.getTimestamp("dateEcheance").toLocalDateTime();;
+                Double mensualite = resultSet.getDouble("mensualite");;
+                LocalDateTime datePaiement = resultSet.getTimestamp("datePaiement").toLocalDateTime();;
+                StatutPaiement statutPaiement = StatutPaiement.valueOf(resultSet.getString("statutPaiement"));;
+                Integer credit_id = resultSet.getInt("credit_id");;
+
+                echeances.add(new Echeance(echeanceId, dateEcheance, mensualite, datePaiement, statutPaiement, credit_id));
+            }
+            return echeances;
+        } catch (SQLException e) {
+            throw new DatabaseException(e.getMessage(), e);
+        }
     }
 }

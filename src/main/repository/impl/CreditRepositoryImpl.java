@@ -91,7 +91,6 @@ public class CreditRepositoryImpl implements CreditRepository {
         } catch (SQLException e) {
             throw new DatabaseException(e.getMessage(), e);
         }
-
     }
 
     @Override

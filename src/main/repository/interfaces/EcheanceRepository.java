@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface EcheanceRepository {
     Optional<Echeance> inserEcheance(Echeance echeance);
     Optional<Echeance> findEcheance(Integer id);
-    Optional<Echeance> updateEcheance(Integer id, Map<String, Object> update);
+    Optional<Echeance> updateEcheance(Integer id, Map<String, Object> updates);
     List<Echeance> selectEcheances();
     Boolean deleteEcheance(Echeance echeance);
     List<Echeance> selectCreditEcheances(Integer id);
