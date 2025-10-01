@@ -1,5 +1,6 @@
 package main.model;
 
+import main.enums.EnumRole;
 import main.enums.EnumSitFam;
 
 import java.time.LocalDate;
@@ -15,10 +16,10 @@ public class Professionnel extends Person{
 
 
     public Professionnel(Integer id, String nom, String prenom, String email, LocalDate dateNaissance, String ville,
-                         Integer nombreEnfants, Boolean investissement, Boolean placement, EnumSitFam situationFamiliale,
-                         LocalDateTime createdAt, Integer score, Double revenu, Double immatriculationFiscale, String secteurActivite, String Activite
+                         Integer nombreEnfants, Boolean investissement, Boolean placement, EnumSitFam situationFamiliale, LocalDateTime createdAt,
+                         Integer score, EnumRole role, Double revenu, Double immatriculationFiscale, String secteurActivite, String Activite
     ) {
-        super(id, nom, prenom, email, dateNaissance, ville, nombreEnfants, investissement, placement, situationFamiliale, createdAt, score);
+        super(id, nom, prenom, email, dateNaissance, ville, nombreEnfants, investissement, placement, situationFamiliale, createdAt, score, role);
         this.revenu = revenu;
         this.immatriculationFiscale = immatriculationFiscale;
         this.secteurActivite = secteurActivite;
@@ -26,18 +27,18 @@ public class Professionnel extends Person{
     }
 
     public Professionnel(String nom, String prenom, String email, LocalDate dateNaissance, String ville,
-                         Integer nombreEnfants, Boolean investissement, Boolean placement, EnumSitFam situationFamiliale,
-                         LocalDateTime createdAt, Integer score, Double revenu, Double immatriculationFiscale, String secteurActivite, String Activite
+                         Integer nombreEnfants, Boolean investissement, Boolean placement, EnumSitFam situationFamiliale, LocalDateTime createdAt,
+                         Integer score, EnumRole role,Double revenu, Double immatriculationFiscale, String secteurActivite, String Activite
     ) {
-        super(nom, prenom, email, dateNaissance, ville, nombreEnfants, investissement, placement, situationFamiliale, createdAt, score);
+        super(nom, prenom, email, dateNaissance, ville, nombreEnfants, investissement, placement, situationFamiliale, createdAt, score, role);
         this.revenu = revenu;
         this.immatriculationFiscale = immatriculationFiscale;
         this.secteurActivite = secteurActivite;
         this.Activite = Activite;
     }
 
-    public Professionnel(Integer id, String nom, String prenom, String email, LocalDate dateNaissance, String ville, Integer nombreEnfants, Boolean investissement, Boolean placement, EnumSitFam situationFamiliale, LocalDateTime createdAt, Integer score) {
-        super(id, nom, prenom, email, dateNaissance, ville, nombreEnfants, investissement, placement, situationFamiliale, createdAt, score);
+    public Professionnel(Integer id, String nom, String prenom, String email, LocalDate dateNaissance, String ville, Integer nombreEnfants, Boolean investissement, Boolean placement, EnumSitFam situationFamiliale, LocalDateTime createdAt, Integer score, EnumRole role) {
+        super(id, nom, prenom, email, dateNaissance, ville, nombreEnfants, investissement, placement, situationFamiliale, createdAt, score, role);
     }
 
     public Double getRevenu() {

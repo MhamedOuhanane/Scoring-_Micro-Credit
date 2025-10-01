@@ -1,9 +1,14 @@
+import main.enums.EnumDecision;
 import main.enums.StatutPaiement;
 import main.model.*;
-import main.repository.impl.EcheanceRepositoryImpl;
-import main.repository.impl.IncidentRepositoryImpl;
-import main.repository.interfaces.EcheanceRepository;
-import main.repository.interfaces.IncidentRepository;
+import main.repository.impl.*;
+import main.repository.interfaces.*;
+import main.service.impl.CreditServiceImpl;
+import main.service.impl.EmployeServiceImpl;
+import main.service.impl.ProfessionnelServiceImpl;
+import main.service.interfaces.CreditService;
+import main.service.interfaces.EmployeService;
+import main.service.interfaces.ProfessionnelService;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -13,20 +18,19 @@ import java.util.Map;
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
-        IncidentRepository incidentRepository = new IncidentRepositoryImpl();
-        Incident incident1 = new Incident(LocalDateTime.now(), 90, StatutPaiement.ENRETARD, 4);
-        Incident incident2 = new Incident(LocalDateTime.now(), 70, StatutPaiement.IMPAYENONREGLE, 5);
-        try {
-            System.out.println("|||| Insert ||||");
-            incident1 = incidentRepository.insertIncident(incident1).get();
-            System.out.println("incident1 inseret avec success");
-            incident2 = incidentRepository.insertIncident(incident2).get();
-            System.out.println("incident2 inseret avec success");
+        PersonRepository personRepository = new PersonRepositoryImpl();
+        EmployeRepository employeRepository = new EmployeRepositoryImp();
+        ProfessionnelRepository professionnelRepository = new ProfessionnelRepositoryImpl();
+        CreditRepository creditRepository = new CreditRepositoryImpl();
 
-            incidentRepository.selectIncidents().forEach(ech -> System.out.println("Id "+ ech.getId() + " | Date : " + ech.getDateIncident().toString() + " | score: "+ ech.getScore()+" | status: " + ech.getTypeIncident().getDescription()));
-            Incident incident3 = incidentRepository.findIncident(2).orElseThrow(RuntimeException::new);
-            System.out.println("incident3 " + incident3.getId() + " | Date : " + incident3.getDateIncident().toString() + " | score: "+ incident3.getScore()+" | status: " + incident3.getTypeIncident().getDescription());
-            incidentRepository.selectEcheanceIncidents(5).forEach(ech -> System.out.println("Id "+ ech.getId() + " | Date : " + ech.getDateIncident().toString() + " | score: "+ ech.getScore()+" | status: " + ech.getTypeIncident().getDescription()));
+        EmployeService employeService = new EmployeServiceImpl(employeRepository);
+        ProfessionnelService professionnelService = new ProfessionnelServiceImpl(professionnelRepository);
+        CreditService creditService = new CreditServiceImpl(creditRepository, personRepository, employeService, professionnelService);
+
+        Credit credit1 = new Credit(LocalDateTime.now(), 15_000., 15_000., 0.1, 6, "developpeur", EnumDecision.ETUDEMANUELLE, 9);
+        try {
+            credit1 = creditService.ajouterCredit(credit1);
+            System.out.println("Credit ajouter avec success");
         } catch (RuntimeException e) {
             System.out.println("Erreur : " + e.getMessage());
         }

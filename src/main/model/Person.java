@@ -1,25 +1,28 @@
 package main.model;
 
+import main.enums.EnumDecision;
+import main.enums.EnumRole;
 import main.enums.EnumSitFam;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Person {
-    private Integer id;
-    private String nom;
-    private String prenom;
-    private String email;
-    private LocalDate dateNaissance;
-    private String ville;
-    private Integer nombreEnfants;
-    private Boolean investissement;
-    private Boolean placement;
-    private EnumSitFam situationFamiliale;
-    private LocalDateTime createdAt;
-    private Integer score;
+    protected Integer id;
+    protected String nom;
+    protected String prenom;
+    protected String email;
+    protected LocalDate dateNaissance;
+    protected String ville;
+    protected Integer nombreEnfants;
+    protected Boolean investissement;
+    protected Boolean placement;
+    protected EnumSitFam situationFamiliale;
+    protected LocalDateTime createdAt;
+    protected Integer score;
+    protected EnumRole role;
 
-    public Person(Integer id, String nom, String prenom, String email, LocalDate dateNaissance, String ville, Integer nombreEnfants, Boolean investissement, Boolean placement, EnumSitFam situationFamiliale, LocalDateTime createdAt, Integer score
+    public Person(Integer id, String nom, String prenom, String email, LocalDate dateNaissance, String ville, Integer nombreEnfants, Boolean investissement, Boolean placement, EnumSitFam situationFamiliale, LocalDateTime createdAt, Integer score, EnumRole role
     ) {
         this.id = id;
         this.nom = nom;
@@ -33,10 +36,11 @@ public class Person {
         this.situationFamiliale = situationFamiliale;
         this.createdAt = createdAt;
         this.score = score;
+        this.role = role;
     }
 
     public Person(String nom, String prenom, String email, LocalDate dateNaissance, String ville, Integer nombreEnfants,
-                  Boolean investissement, Boolean placement, EnumSitFam situationFamiliale, LocalDateTime createdAt, Integer score
+                  Boolean investissement, Boolean placement, EnumSitFam situationFamiliale, LocalDateTime createdAt, Integer score, EnumRole role
     ) {
         this.nom = nom;
         this.prenom = prenom;
@@ -49,6 +53,7 @@ public class Person {
         this.situationFamiliale = situationFamiliale;
         this.createdAt = createdAt;
         this.score = score;
+        this.role = role;
     }
 
     public Integer getId() {
@@ -145,5 +150,13 @@ public class Person {
 
     public void setScore(Integer score) {
         this.score = score;
+    }
+
+    public EnumRole getRole() {
+        return role;
+    }
+
+    public void setRole(EnumRole role) {
+        this.role = role;
     }
 }

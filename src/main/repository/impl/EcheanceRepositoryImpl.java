@@ -50,7 +50,7 @@ public class EcheanceRepositoryImpl implements EcheanceRepository {
                 Double mensualite = resultSet.getDouble("mensualite");;
                 LocalDateTime datePaiement = resultSet.getTimestamp("datePaiement").toLocalDateTime();;
                 StatutPaiement statutPaiement = StatutPaiement.valueOf(resultSet.getString("statutPaiement"));;
-                Integer credit_id = resultSet.getInt("credit_id");;
+                Integer credit_id = resultSet.getInt("credit_id");
 
                 return Optional.of(new Echeance(echeanceId, dateEcheance, mensualite, datePaiement, statutPaiement, credit_id));
             }

@@ -1,5 +1,6 @@
 package main.model;
 
+import main.enums.EnumRole;
 import main.enums.EnumSecteur;
 import main.enums.EnumSitFam;
 
@@ -13,15 +14,15 @@ public class Employe extends Person{
     private String typeContrat;
     private EnumSecteur secteur;
 
-    public Employe(Integer id, String nom, String prenom, String email, LocalDate dateNaissance, String ville, Integer nombreEnfants, Boolean investissement, Boolean placement, EnumSitFam situationFamiliale, LocalDateTime createdAt, Integer score) {
-        super(id, nom, prenom, email, dateNaissance, ville, nombreEnfants, investissement, placement, situationFamiliale, createdAt, score);
+    public Employe(Integer id, String nom, String prenom, String email, LocalDate dateNaissance, String ville, Integer nombreEnfants, Boolean investissement, Boolean placement, EnumSitFam situationFamiliale, LocalDateTime createdAt, Integer score, EnumRole role) {
+        super(id, nom, prenom, email, dateNaissance, ville, nombreEnfants, investissement, placement, situationFamiliale, createdAt, score, role);
     }
 
     public Employe(Integer id, String nom, String prenom, String email, LocalDate dateNaissance, String ville, Integer nombreEnfants,
                    Boolean investissement, Boolean placement, EnumSitFam situationFamiliale, LocalDateTime createdAt, Integer score,
-                   Double salaire, Integer anciennete, String poste, String typeContrat, EnumSecteur secteur
+                   EnumRole role, Double salaire, Integer anciennete, String poste, String typeContrat, EnumSecteur secteur
     ) {
-        super(id, nom, prenom, email, dateNaissance, ville, nombreEnfants, investissement, placement, situationFamiliale, createdAt, score);
+        super(id, nom, prenom, email, dateNaissance, ville, nombreEnfants, investissement, placement, situationFamiliale, createdAt, score, role);
         this.salaire = salaire;
         this.anciennete = anciennete;
         this.poste = poste;
@@ -31,9 +32,9 @@ public class Employe extends Person{
 
     public Employe(String nom, String prenom, String email, LocalDate dateNaissance, String ville, Integer nombreEnfants,
                    Boolean investissement, Boolean placement, EnumSitFam situationFamiliale, LocalDateTime createdAt, Integer score,
-                   Double salaire, Integer anciennete, String poste, String typeContrat, EnumSecteur secteur
+                   EnumRole role, Double salaire, Integer anciennete, String poste, String typeContrat, EnumSecteur secteur
     ) {
-        super(nom, prenom, email, dateNaissance, ville, nombreEnfants, investissement, placement, situationFamiliale, createdAt, score);
+        super(nom, prenom, email, dateNaissance, ville, nombreEnfants, investissement, placement, situationFamiliale, createdAt, score, role);
         this.salaire = salaire;
         this.anciennete = anciennete;
         this.poste = poste;

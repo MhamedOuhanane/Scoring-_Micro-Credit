@@ -2,17 +2,17 @@ package main.service.impl;
 
 import main.model.Professionnel;
 import main.repository.interfaces.ProfessionnelRepository;
-import main.service.interfaces.ProfessionnelServce;
+import main.service.interfaces.ProfessionnelService;
 import main.utils.DatabaseException;
 
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class ProfessionnelServceImpl implements ProfessionnelServce {
+public class ProfessionnelServiceImpl implements ProfessionnelService {
     private final ProfessionnelRepository professionnelRepository;
 
-    public ProfessionnelServceImpl(ProfessionnelRepository professionnelRepository) {
+    public ProfessionnelServiceImpl(ProfessionnelRepository professionnelRepository) {
         this.professionnelRepository = professionnelRepository;
     }
 

@@ -10,7 +10,8 @@ CREATE TABLE IF NOT EXISTS person (
     placement BOOLEAN DEFAULT FALSE,
     situationFamiliale ENUM("CELIBATAIRE", "MARIE", "VEUF"),
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    score INT DEFAULT 0
+    score INT DEFAULT 0,
+    role ENUM("employé", "professionnel") DEFAULT "employé"
 );
 
 CREATE TABLE IF NOT EXISTS employe (

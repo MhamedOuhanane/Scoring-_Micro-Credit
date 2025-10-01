@@ -5,7 +5,7 @@ import main.model.Professionnel;
 import java.util.List;
 import java.util.Map;
 
-public interface ProfessionnelServce {
+public interface ProfessionnelService {
     Professionnel ajouterProfessionnel(Professionnel professionnel);
     Professionnel findProfessionnel(Integer id);
     Professionnel updateProfessionnel(Integer id, Map<String, Object> update);

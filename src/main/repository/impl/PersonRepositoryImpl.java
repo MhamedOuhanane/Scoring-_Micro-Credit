@@ -1,6 +1,7 @@
 package main.repository.impl;
 
 import main.config.DatabaseConfig;
+import main.enums.EnumRole;
 import main.enums.EnumSitFam;
 import main.model.Person;
 import main.repository.interfaces.PersonRepository;
@@ -18,8 +19,8 @@ public class PersonRepositoryImpl implements PersonRepository {
     @Override
     public Optional<Person> insertPerson(Person person) {
         String insertQuery = "INSERT INTO person " +
-                "(nom, prenom, email, dateNaissance, ville, nombreEnfants, investissement, placement, situationFamiliale, createdAt, score) " +
-                "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "(nom, prenom, email, dateNaissance, ville, nombreEnfants, investissement, placement, situationFamiliale, createdAt, score, role) " +
+                "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement pstmt = conn.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS)) {
             pstmt.setString(1, person.getNom());
@@ -33,6 +34,7 @@ public class PersonRepositoryImpl implements PersonRepository {
             pstmt.setString(9, person.getSituationFamiliale().toString());
             pstmt.setTimestamp(10, Timestamp.valueOf(person.getCreatedAt()));
             pstmt.setInt(11, person.getScore());
+            pstmt.setString(12, person.getRole().toString());
 
             int rowsAff = pstmt.executeUpdate();
             if (rowsAff > 0) {
@@ -69,8 +71,9 @@ public class PersonRepositoryImpl implements PersonRepository {
                 EnumSitFam situationFamiliale = EnumSitFam.valueOf(resultSet.getString("situationFamiliale"));
                 LocalDateTime createdAt = resultSet.getTimestamp("createdAt").toLocalDateTime();
                 Integer score = resultSet.getInt("score");
+                EnumRole role = EnumRole.valueOf(resultSet.getString("role"));
 
-                Person person = new Person(id, nom, prenom, email, dateNaissance, ville, nombreEnfants, investissement, placement, situationFamiliale, createdAt, score);
+                Person person = new Person(id, nom, prenom, email, dateNaissance, ville, nombreEnfants, investissement, placement, situationFamiliale, createdAt, score, role);
                 return Optional.of(person);
             }
             return Optional.empty();

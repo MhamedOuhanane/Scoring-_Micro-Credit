@@ -113,4 +113,20 @@ public class Credit {
     public void setPerson_id(Integer person_id) {
         this.person_id = person_id;
     }
+
+    public void generatedDureeMois(Double montant) {
+        if (montant <= 24_000.) {
+            this.dureeenMois = 6;
+            this.tauxInteret = 0.1;
+        } else if (montant <= 60_000.) {
+            this.dureeenMois = 10;
+            this.tauxInteret = 0.2;
+        } else if (montant <= 150_000.) {
+            this.dureeenMois = 15;
+            this.tauxInteret = 0.3;
+        } else {
+            this.dureeenMois = 24;
+            this.tauxInteret = 0.4;
+        }
+    }
 }

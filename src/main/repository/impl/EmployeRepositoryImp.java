@@ -1,6 +1,7 @@
 package main.repository.impl;
 
 import main.config.DatabaseConfig;
+import main.enums.EnumRole;
 import main.enums.EnumSecteur;
 import main.enums.EnumSitFam;
 import main.model.Employe;
@@ -51,7 +52,7 @@ public class EmployeRepositoryImp  implements EmployeRepository {
         String findQurey = "SELECT * FROM employe WHERE id = ?";
         try {
             Person person = personRepository.findPerson(id).orElseThrow(RuntimeException::new);
-            Employe employe = new Employe(person.getId(), person.getNom(), person.getPrenom(), person.getEmail(), person.getDateNaissance(), person.getVille(), person.getNombreEnfants(), person.getInvestissement(), person.getPlacement(), person.getSituationFamiliale(), person.getCreatedAt(), person.getScore());
+            Employe employe = new Employe(person.getId(), person.getNom(), person.getPrenom(), person.getEmail(), person.getDateNaissance(), person.getVille(), person.getNombreEnfants(), person.getInvestissement(), person.getPlacement(), person.getSituationFamiliale(), person.getCreatedAt(), person.getScore(), person.getRole());
             PreparedStatement pstmt = conn.prepareStatement(findQurey);
             pstmt.setInt(1, id);
 
@@ -75,7 +76,7 @@ public class EmployeRepositoryImp  implements EmployeRepository {
     public Optional<Employe> updateEmploye(Employe employe, Map<String, Object> updates) {
         Map<String, List<String>> attributesAccount = new HashMap<>();
         Map<String, Object> updatesPerson = new HashMap<>();
-        attributesAccount.put("person", new ArrayList<String>(Arrays.asList("nom", "prenom", "email", "dateNaissance", "ville", "nombreEnfants", "investissement", "placement", "situationFamiliale", "createdAt", "score")));
+        attributesAccount.put("person", new ArrayList<String>(Arrays.asList("nom", "prenom", "email", "dateNaissance", "ville", "nombreEnfants", "investissement", "placement", "situationFamiliale", "createdAt", "score", "role")));
         attributesAccount.put("employe", new ArrayList<String>(Arrays.asList("salaire", "anciennete", "poste", "typeContrat", "secteur")));
 
         StringBuilder updateEmpQuery = new StringBuilder("UPDATE employe SET ");
@@ -135,9 +136,10 @@ public class EmployeRepositoryImp  implements EmployeRepository {
                 String poste = resultSet.getString("poste");
                 String typeContrat = resultSet.getString("typeContrat");
                 EnumSecteur secteur = EnumSecteur.valueOf(resultSet.getString("secteur"));
+                EnumRole role = EnumRole.valueOf(resultSet.getString("role"));
 
                 employes.add(new Employe(id, nom, prenom, email, dateNaissance, ville, nombreEnfants,
-                        investissement, placement, situationFamiliale, createdAt, score,
+                        investissement, placement, situationFamiliale, createdAt, score, role,
                         salaire, anciennete, poste, typeContrat, secteur));
             }
             return employes;

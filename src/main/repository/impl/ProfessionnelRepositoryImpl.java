@@ -1,6 +1,7 @@
 package main.repository.impl;
 
 import main.config.DatabaseConfig;
+import main.enums.EnumRole;
 import main.enums.EnumSitFam;
 import main.model.Professionnel;
 import main.model.Person;
@@ -49,7 +50,7 @@ public class ProfessionnelRepositoryImpl implements ProfessionnelRepository {
         String findQurey = "SELECT * FROM professionnel WHERE id = ?";
         try {
             Person person = personRepository.findPerson(id).orElseThrow(RuntimeException::new);
-            Professionnel professionnel = new Professionnel(person.getId(), person.getNom(), person.getPrenom(), person.getEmail(), person.getDateNaissance(), person.getVille(), person.getNombreEnfants(), person.getInvestissement(), person.getPlacement(), person.getSituationFamiliale(), person.getCreatedAt(), person.getScore());
+            Professionnel professionnel = new Professionnel(person.getId(), person.getNom(), person.getPrenom(), person.getEmail(), person.getDateNaissance(), person.getVille(), person.getNombreEnfants(), person.getInvestissement(), person.getPlacement(), person.getSituationFamiliale(), person.getCreatedAt(), person.getScore(), person.getRole());
             PreparedStatement pstmt = conn.prepareStatement(findQurey);
             pstmt.setInt(1, id);
 
@@ -72,7 +73,7 @@ public class ProfessionnelRepositoryImpl implements ProfessionnelRepository {
     public Optional<Professionnel> updateProfessionnel(Professionnel professionnel, Map<String, Object> updates) {
         Map<String, List<String>> attributesAccount = new HashMap<>();
         Map<String, Object> listUpdatesPerson = new HashMap<>();
-        attributesAccount.put("person", new ArrayList<String>(Arrays.asList("nom", "prenom", "email", "dateNaissance", "ville", "nombreEnfants", "investissement", "placement", "situationFamiliale", "createdAt", "score")));
+        attributesAccount.put("person", new ArrayList<String>(Arrays.asList("nom", "prenom", "email", "dateNaissance", "ville", "nombreEnfants", "investissement", "placement", "situationFamiliale", "createdAt", "score", "role")));
         attributesAccount.put("professionnel", new ArrayList<String>(Arrays.asList("revenu", "immatriculationFiscale", "secteurActivite", "Activite")));
 
         StringBuilder updatePerfoQuery = new StringBuilder("UPDATE professionnel SET ");
@@ -131,9 +132,10 @@ public class ProfessionnelRepositoryImpl implements ProfessionnelRepository {
                 Double immatriculationFiscale = resultSet.getDouble("immatriculationFiscale");
                 String secteurActivite = resultSet.getString("secteurActivite");
                 String Activite = resultSet.getString("Activite");
+                EnumRole role = EnumRole.valueOf(resultSet.getString("role"));
 
                 professionnels.add(new Professionnel(id, nom, prenom, email, dateNaissance, ville, nombreEnfants,
-                        investissement, placement, situationFamiliale, createdAt, score,
+                        investissement, placement, situationFamiliale, createdAt, score, role,
                         revenu, immatriculationFiscale, secteurActivite, Activite));
             }
             return professionnels;
