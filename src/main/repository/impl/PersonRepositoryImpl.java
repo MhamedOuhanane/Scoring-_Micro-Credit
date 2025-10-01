@@ -16,7 +16,7 @@ public class PersonRepositoryImpl implements PersonRepository {
     private final Connection conn = DatabaseConfig.getInstance().getConnection();
 
     @Override
-    public Optional<Person> inserPerson(Person person) {
+    public Optional<Person> insertPerson(Person person) {
         String insertQuery = "INSERT INTO person " +
                 "(nom, prenom, email, dateNaissance, ville, nombreEnfants, investissement, placement, situationFamiliale, createdAt, score) " +
                 "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";

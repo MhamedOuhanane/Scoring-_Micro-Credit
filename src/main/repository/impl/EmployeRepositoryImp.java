@@ -22,10 +22,10 @@ public class EmployeRepositoryImp  implements EmployeRepository {
     private final PersonRepository personRepository = new PersonRepositoryImpl();
 
     @Override
-    public Optional<Employe> inserEmploye(Employe employe) {
+    public Optional<Employe> insertEmploye(Employe employe) {
         String insertQuery = "INSERT INTO employe (id, salaire, anciennete, poste, typeContrat, secteur) VALUES (?, ?, ?, ?, ?, ?)";
         try {
-            Person person = personRepository.inserPerson(employe).orElseThrow(RuntimeException::new);
+            Person person = personRepository.insertPerson(employe).orElseThrow(RuntimeException::new);
             PreparedStatement pstmt = conn.prepareStatement(insertQuery);
             pstmt.setInt(1, person.getId());
             pstmt.setDouble(2, employe.getSalaire());

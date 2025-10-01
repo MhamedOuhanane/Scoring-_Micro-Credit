@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Optional;
 
 public interface CreditRepository {
-    Optional<Credit> inserCredit(Credit credit);
+    Optional<Credit> insertCredit(Credit credit);
     Optional<Credit> findCredit(Integer id);
     Optional<Credit> updateCredit(Integer id, Map<String, Object> update);
     List<Credit> selectCredits();

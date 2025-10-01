@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Optional;
 
 public interface PersonRepository {
-    Optional<Person> inserPerson(Person person);
+    Optional<Person> insertPerson(Person person);
     Optional<Person> findPerson(Integer id);
     Optional<Person> updatePerson(Integer id, Map<String, Object> updates);
     Boolean deletePerson(Person person);

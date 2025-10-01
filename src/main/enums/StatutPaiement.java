@@ -2,7 +2,7 @@ package main.enums;
 
 public enum StatutPaiement {
     PAYEATEMPS("Délai de paiement"),
-    ENRETARD("Retard"),
+    ENRETARD("En retard"),
     PAYEENRETARD("Paiement tardif"),
     IMPAYENONREGLE("Impayé non réglementé"),
     IMPAYEREGLE("Impayé réglé");

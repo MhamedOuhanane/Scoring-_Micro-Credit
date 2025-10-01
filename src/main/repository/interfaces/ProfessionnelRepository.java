@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Optional;
 
 public interface ProfessionnelRepository {
-    Optional<Professionnel> inserProfessionnel(Professionnel professionnel);
+    Optional<Professionnel> insertProfessionnel(Professionnel professionnel);
     Optional<Professionnel> findProfessionnel(Integer id);
     Optional<Professionnel> updateProfessionnel(Integer id, Map<String, Object> updates);
     List<Professionnel> selectProfessionnels();

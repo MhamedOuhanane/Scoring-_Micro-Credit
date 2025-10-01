@@ -1,12 +1,8 @@
 package main.repository.impl;
 
 import main.config.DatabaseConfig;
-import main.enums.EnumDecision;
 import main.enums.StatutPaiement;
-import main.model.Credit;
 import main.model.Echeance;
-import main.model.Employe;
-import main.model.Person;
 import main.repository.interfaces.EcheanceRepository;
 import main.utils.DatabaseException;
 
@@ -18,7 +14,7 @@ public class EcheanceRepositoryImpl implements EcheanceRepository {
     private final Connection conn = DatabaseConfig.getInstance().getConnection();
 
     @Override
-    public Optional<Echeance> inserEcheance(Echeance echeance) {
+    public Optional<Echeance> insertEcheance(Echeance echeance) {
         String insertQuery = "INSERT INTO echeance (dateEcheance, mensualite, datePaiement, statutPaiement, credit_id) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement pstmt = conn.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS)) {
             pstmt.setTimestamp(1, Timestamp.valueOf(echeance.getDateEcheance()));

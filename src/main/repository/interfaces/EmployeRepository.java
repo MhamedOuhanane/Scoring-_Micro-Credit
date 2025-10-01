@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Optional;
 
 public interface EmployeRepository {
-    Optional<Employe> inserEmploye(Employe employe);
+    Optional<Employe> insertEmploye(Employe employe);
     Optional<Employe> findEmploye(Integer id);
     Optional<Employe> updateEmploye(Integer id, Map<String, Object> update);
     List<Employe> selectEmployes();

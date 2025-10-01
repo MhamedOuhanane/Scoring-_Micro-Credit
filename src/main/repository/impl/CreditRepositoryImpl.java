@@ -14,7 +14,7 @@ public class CreditRepositoryImpl implements CreditRepository {
     private final Connection conn = DatabaseConfig.getInstance().getConnection();
 
     @Override
-    public Optional<Credit> inserCredit(Credit credit) {
+    public Optional<Credit> insertCredit(Credit credit) {
         String insertQuery = "INSERT INTO credit (dateCredit, montantDemande, montantOctroye, tauxInteret, dureeenMois, typeCredit, decision, person_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement pstmt = conn.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS)) {
             pstmt.setTimestamp(1, Timestamp.valueOf(credit.getDateCredit()));
@@ -43,8 +43,8 @@ public class CreditRepositoryImpl implements CreditRepository {
 
     @Override
     public Optional<Credit> findCredit(Integer id) {
-        String findQurey = "SELECT * FROM credit WHERE id = ?";
-        try (PreparedStatement pstmt = conn.prepareStatement(findQurey)) {
+        String findQuery = "SELECT * FROM credit WHERE id = ?";
+        try (PreparedStatement pstmt = conn.prepareStatement(findQuery)) {
             pstmt.setInt(1, id);
             ResultSet resultSet = pstmt.executeQuery();
             if (resultSet.next()) {

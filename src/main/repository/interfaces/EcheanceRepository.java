@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Optional;
 
 public interface EcheanceRepository {
-    Optional<Echeance> inserEcheance(Echeance echeance);
+    Optional<Echeance> insertEcheance(Echeance echeance);
     Optional<Echeance> findEcheance(Integer id);
     Optional<Echeance> updateEcheance(Integer id, Map<String, Object> updates);
     List<Echeance> selectEcheances();

@@ -1,7 +1,6 @@
 package main.repository.impl;
 
 import main.config.DatabaseConfig;
-import main.enums.EnumSecteur;
 import main.enums.EnumSitFam;
 import main.model.Professionnel;
 import main.model.Person;
@@ -22,10 +21,10 @@ public class ProfessionnelRepositoryImpl implements ProfessionnelRepository {
     private final PersonRepository personRepository = new PersonRepositoryImpl();
 
     @Override
-    public Optional<Professionnel> inserProfessionnel(Professionnel professionnel) {
+    public Optional<Professionnel> insertProfessionnel(Professionnel professionnel) {
         String insertQuery = "INSERT INTO professionnel (id, revenu, immatriculationFiscale, secteurActivite, Activite) VALUES (?, ?, ?, ?, ?)";
         try {
-            Person person = personRepository.inserPerson(professionnel).orElseThrow(RuntimeException::new);
+            Person person = personRepository.insertPerson(professionnel).orElseThrow(RuntimeException::new);
             PreparedStatement pstmt = conn.prepareStatement(insertQuery);
             pstmt.setInt(1, person.getId());
             pstmt.setDouble(2, professionnel.getRevenu());
