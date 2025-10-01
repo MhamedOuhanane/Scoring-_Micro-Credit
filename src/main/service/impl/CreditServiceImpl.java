@@ -2,6 +2,7 @@ package main.service.impl;
 
 import main.enums.EnumDecision;
 import main.model.Credit;
+import main.model.Employe;
 import main.model.Person;
 import main.repository.interfaces.CreditRepository;
 import main.repository.interfaces.EmployeRepository;
@@ -36,7 +37,7 @@ public class CreditServiceImpl implements CreditService {
         try {
             Person person = personRepository.findPerson(credit.getPerson_id()).orElseThrow(RuntimeException::new);
             Double salaire = this.touverSalaire(person.getRole().getDescription(), credit.getPerson_id());
-            List<Credit> credits = this.getAllCredits().stream()
+            List<Credit> credits = this.getPersonCredits(person.getId()).stream()
                     .filter(credit1 -> credit1.getDecision().equals(EnumDecision.REFUS_AUTOMATIQUE))
                     .collect(Collectors.toList());
             String existence = credits.isEmpty() ? "nouveau" : "existant";
@@ -77,12 +78,26 @@ public class CreditServiceImpl implements CreditService {
 
     @Override
     public Credit findCredit(Integer id) {
-        return null;
+        if (id == null) throw new  IllegalArgumentException("L'id credit ne peut pas être null");
+        try {
+            return creditRepository.findCredit(id)
+                    .orElseThrow((() -> new RuntimeException("Aucun credit trouvé avec l'id: " + id)));
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
     }
 
     @Override
     public Credit updateCredit(Integer id, Map<String, Object> update) {
-        return null;
+        if (id == null) throw new  IllegalArgumentException("L'id credit ne peut pas être null");
+        if (update.isEmpty()) throw new  RuntimeException("Les modifications ne peut pas être vide");
+        try {
+            Credit credit = this.findCredit(id);
+            return creditRepository.updateCredit(credit, update)
+                    .orElseThrow(() -> new RuntimeException("Impossible de modifier le credit d'id: " + id));
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
     }
 
     @Override
@@ -100,12 +115,28 @@ public class CreditServiceImpl implements CreditService {
 
     @Override
     public Boolean deleteCredit(Integer id) {
-        return null;
+        if (id == null) throw new  IllegalArgumentException("L'id de credit ne peut pas être null");
+        try {
+            Credit credit = this.findCredit(id);
+            return creditRepository.deleteCredit(credit);
+        } catch (RuntimeException e) {
+            throw new DatabaseException(e.getMessage(), e);
+        }
     }
 
     @Override
     public List<Credit> getPersonCredits(Integer person_id) {
-        return Collections.emptyList();
+        if (person_id == null) throw new  IllegalArgumentException("L'id credit ne peut pas être null");
+        try {
+            Person person = personRepository.findPerson(person_id).orElseThrow(RuntimeException::new);
+            return creditRepository.selectPersonCredits(person_id).stream()
+                    .sorted((cd1, cd2) -> {
+                        return cd1.getDateCredit().compareTo(cd2.getDateCredit());
+                    })
+                    .collect(Collectors.toList());
+        } catch (RuntimeException e) {
+            throw new DatabaseException(e.getMessage(), e);
+        }
     }
 
     private Double touverSalaire(String role, Integer person_id) {
