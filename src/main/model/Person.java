@@ -6,6 +6,7 @@ import main.enums.EnumSitFam;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
 
 public class Person {
     protected Integer id;
@@ -158,5 +159,10 @@ public class Person {
 
     public void setRole(EnumRole role) {
         this.role = role;
+    }
+
+    public static Integer calculAgePerson(LocalDate dateNaissance) {
+        Period period = Period.between(dateNaissance, LocalDate.now());
+        return period.getYears();
     }
 }

@@ -19,8 +19,8 @@ public class PersonRepositoryImpl implements PersonRepository {
     @Override
     public Optional<Person> insertPerson(Person person) {
         String insertQuery = "INSERT INTO person " +
-                "(nom, prenom, email, dateNaissance, ville, nombreEnfants, investissement, placement, situationFamiliale, createdAt, score, role) " +
-                "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "(nom, prenom, email, dateNaissance, ville, nombreEnfants, investissement, placement, situationFamiliale, score, role) " +
+                "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement pstmt = conn.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS)) {
             pstmt.setString(1, person.getNom());
@@ -32,9 +32,8 @@ public class PersonRepositoryImpl implements PersonRepository {
             pstmt.setBoolean(7, person.getInvestissement());
             pstmt.setBoolean(8, person.getPlacement());
             pstmt.setString(9, person.getSituationFamiliale().toString());
-            pstmt.setTimestamp(10, Timestamp.valueOf(person.getCreatedAt()));
-            pstmt.setInt(11, person.getScore());
-            pstmt.setString(12, person.getRole().toString());
+            pstmt.setInt(10, person.getScore());
+            pstmt.setString(11, person.getRole().toString());
 
             int rowsAff = pstmt.executeUpdate();
             if (rowsAff > 0) {

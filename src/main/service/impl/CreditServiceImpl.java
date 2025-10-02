@@ -71,6 +71,7 @@ public class CreditServiceImpl implements CreditService {
             credit.generatedDureeMois(credit.getMontantOctroye());
             credit = creditRepository.insertCredit(credit).orElseThrow(RuntimeException::new);
             Double montant = credit.getMontantDemande() + credit.getMontantDemande() * credit.getTauxInteret();
+
             Double mensualite = ((int) (montant / credit.getDureeenMois())) + 1.;
             System.out.println("Trouver credit: " + credit.getId() + "|" + credit.getDateCredit() + " | montant: " + montant + " | mon" + mensualite);
             for (int i = 1; i <= credit.getDureeenMois(); i++) {

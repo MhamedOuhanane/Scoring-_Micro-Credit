@@ -7,6 +7,7 @@ import main.model.Person;
 import main.repository.interfaces.CreditRepository;
 import main.repository.interfaces.IncidentRepository;
 import main.repository.interfaces.PersonRepository;
+import main.service.interfaces.CreditService;
 import main.service.interfaces.EcheanceService;
 import main.service.interfaces.IncidentService;
 import main.utils.DatabaseException;
@@ -16,13 +17,13 @@ import java.util.stream.Collectors;
 
 public class IncidentServiceImpl implements IncidentService {
     private final IncidentRepository incidentRepository;
-    private final CreditRepository creditRepository;
+    private final CreditService creditService;
     private final EcheanceService echeanceService;
     private final PersonRepository personRepository;
 
-    public IncidentServiceImpl(IncidentRepository incidentRepository, CreditRepository creditRepository, EcheanceService echeanceService, PersonRepository personRepository) {
+    public IncidentServiceImpl(IncidentRepository incidentRepository, CreditService creditService, EcheanceService echeanceService, PersonRepository personRepository) {
         this.incidentRepository = incidentRepository;
-        this.creditRepository = creditRepository;
+        this.creditService = creditService;
         this.echeanceService = echeanceService;
         this.personRepository = personRepository;
     }
@@ -77,7 +78,7 @@ public class IncidentServiceImpl implements IncidentService {
     public List<Incident> getCreditIncidents(Integer credit_id) {
         if (credit_id == null) throw new  IllegalArgumentException("L'id de credit ne peut pas être null");
         try {
-            Credit credit = creditRepository.findCredit(credit_id).orElseThrow(RuntimeException::new);
+            Credit credit = creditService.findCredit(credit_id);
             return echeanceService.selectCreditEcheances(credit_id).stream()
                     .flatMap(echeance -> this.getEcheanceIncidents(echeance.getId()).stream())
                     .sorted((inc1, inc2) -> inc1.getDateIncident().compareTo(inc2.getDateIncident()))

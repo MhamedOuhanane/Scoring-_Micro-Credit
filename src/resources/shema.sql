@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS person (
     situationFamiliale ENUM("CELIBATAIRE", "MARIE", "VEUF"),
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     score INT DEFAULT 0,
-    role ENUM("employé", "professionnel") DEFAULT "employé"
+    role ENUM("EMPLOYE", "PEOFESSIONNEL") DEFAULT "EMPLOYE"
 );
 
 CREATE TABLE IF NOT EXISTS employe (

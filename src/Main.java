@@ -1,21 +1,10 @@
-import main.enums.EnumDecision;
-import main.enums.StatutPaiement;
-import main.model.*;
+
 import main.repository.impl.*;
 import main.repository.interfaces.*;
-import main.service.impl.CreditServiceImpl;
-import main.service.impl.EcheanceServiceImpl;
-import main.service.impl.EmployeServiceImpl;
-import main.service.impl.ProfessionnelServiceImpl;
-import main.service.interfaces.CreditService;
-import main.service.interfaces.EcheanceService;
-import main.service.interfaces.EmployeService;
-import main.service.interfaces.ProfessionnelService;
-
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import main.service.impl.*;
+import main.service.interfaces.*;
+import main.utils.ValidationScanner;
+import main.view.PersonView;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -26,27 +15,47 @@ public class Main {
         ProfessionnelRepository professionnelRepository = new ProfessionnelRepositoryImpl();
         CreditRepository creditRepository = new CreditRepositoryImpl();
         EcheanceRepository echeanceRepository = new EcheanceRepositoryImpl();
+        IncidentRepository incidentRepository = new IncidentRepositoryImpl();
 
         EmployeService employeService = new EmployeServiceImpl(employeRepository);
         ProfessionnelService professionnelService = new ProfessionnelServiceImpl(professionnelRepository);
         CreditService creditService = new CreditServiceImpl(creditRepository, personRepository, employeService, professionnelService, echeanceRepository);
+        EcheanceService echeanceService = new EcheanceServiceImpl(echeanceRepository, creditService, personRepository);
+        IncidentService incidentService = new IncidentServiceImpl(incidentRepository, creditService, echeanceService, personRepository);
 
-        Credit credit1 = new Credit(LocalDateTime.now(), 15_000., 15_000., 0.1, 6, "developpeur", EnumDecision.ETUDEMANUELLE, 9);
-        try {
-            credit1 = creditService.ajouterCredit(credit1);
-            credit1 = creditService.findCredit(3);
-            System.out.println("Trouver credit: " + credit1.getId() + "|" + credit1.getDateCredit());
-            System.out.println("yu1");
-            creditService.getAllCredits().forEach(credit -> System.out.println("Trouver credit: " + credit.getId() + "|" + credit.getDateCredit()));
-            System.out.println("yu2");
-            creditService.getPersonCredits(9).forEach(credit -> System.out.println("Trouver credit: " + credit.getId() + "|" + credit.getDateCredit()));
-            System.out.println("yu3");
-//            if (creditService.deleteCredit(credit1.getId())) System.out.println("delete success");
-//            else System.out.println("delete invalid");
+        PersonView personView = new PersonView();
 
-            System.out.println("Credit ajouter avec success");
-        } catch (RuntimeException e) {
-            System.out.println("Erreur : " + e);
+        boolean connection = true;
+        while (connection) {
+            System.out.println("\n===== MENU Application =====");
+            System.out.println("1. Gerer les Clients");
+            System.out.println("2. Gerer les Credits");
+            System.out.println("3. Gerer les Echeances");
+            System.out.println("4. Gerer les Incidents");
+            System.out.println("5. Quitter");
+            System.out.print("Choix : ");
+
+            int choix = ValidationScanner.getIntegerInput();
+
+            switch (choix) {
+                case 1:
+                    personView.menuPerson();
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    break;
+
+                case 5:
+                    connection = false;
+
+                    break;
+                default:
+                    System.out.println("Choix invalide!");
+
+            }
         }
     }
 }

@@ -100,6 +100,27 @@ public class ValidationScanner {
         return date;
     }
 
+    public static LocalDate getDateNaiInput() {
+        LocalDate date = null;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        while (date == null) {
+            String input = scanner.nextLine();
+            try {
+                date = LocalDate.parse(input, formatter);
+                if (!date.isBefore(LocalDate.now().minusYears(18))) {
+                    System.out.println("🚫 L'age doit être supérieure à 17 annee.");
+                    date = null;
+                }
+            } catch (DateTimeParseException e) {
+                System.out.println("⚠️ Format invalide, utilisez yyyy-MM-dd.");
+                date = null;
+            }
+            if (date == null) System.out.print("Ré-entrez votre choix: ");
+        }
+        return date;
+    }
+
     public static LocalDateTime getDateTimeInput() {
         LocalDateTime date = null;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -114,5 +135,21 @@ public class ValidationScanner {
             if (date == null) System.out.print("Ré-entrez votre choix: ");
         }
         return date;
+    }
+
+    public static Boolean getBooleanInput() {
+        String input = null;
+        while (input == null) {
+            try {
+                input = scanner.nextLine();
+                boolean pattern = Pattern.matches("^[yn]$", input);
+                if (!pattern) throw new InputMismatchException("⚠️ Le chois saisi est invalide ('y' ou 'n'). ");
+            } catch (InputMismatchException exc) {
+                System.out.println("🚫 Le chois saisi est invalide ('y' ou 'n').");
+                input = null;
+            }
+            if (input == null) System.out.print("Ré-entrez votre choix: ");
+        }
+        return input.equals("y");
     }
 }
