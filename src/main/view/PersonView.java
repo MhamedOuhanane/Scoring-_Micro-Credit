@@ -21,7 +21,8 @@ public class PersonView {
             System.out.println("3. Rechercher un Client par son ID");
             System.out.println("4. Afficher les Credit d'un Client");
             System.out.println("5. Afficher les Echeance d'un Client");
-            System.out.println("6. Quitter");
+            System.out.println("6. Afficher les Incidents d'un Client");
+            System.out.println("7. Quitter");
             System.out.print("Choix : ");
 
             int choix = ValidationScanner.getIntegerInput();
@@ -30,14 +31,120 @@ public class PersonView {
                     this.createView();
                     break;
                 case 2:
+                    boolean conRole = true;
+                    while (conRole) {
+                        System.out.println("\n🔹 Choisissez le rôle Role: ");
+                        System.out.println("1. 👨‍💼 Employé");
+                        System.out.println("2. 💼 Professionnel");
+                        System.out.println("6. 🔙 Quitter");
+                        System.out.print("Choix : ");
+
+                        int choix1 = ValidationScanner.getIntegerInput();
+                        switch (choix1) {
+                            case 1:
+                                break;
+                            case 2:
+                                break;
+                            case 3:
+                                conRole = false;
+                                break;
+                            default:
+                                System.out.println("Choix Invalide!");
+                        }
+                    }
                     break;
                 case 3:
+                    boolean conRole1 = true;
+                    while (conRole1) {
+                        System.out.println("\n🔹 Choisissez le rôle Role: ");
+                        System.out.println("1. 👨‍💼 Employé");
+                        System.out.println("2. 💼 Professionnel");
+                        System.out.println("6. 🔙 Quitter");
+                        System.out.print("Choix : ");
+
+                        int choix1 = ValidationScanner.getIntegerInput();
+                        switch (choix1) {
+                            case 1:
+                                break;
+                            case 2:
+                                break;
+                            case 3:
+                                conRole1 = false;
+                                break;
+                            default:
+                                System.out.println("Choix Invalide!");
+                        }
+                    }
                     break;
                 case 4:
-                    break;
+                    boolean conRole2 = true;
+                    while (conRole2) {
+                        System.out.println("\n🔹 Choisissez le rôle Role: ");
+                        System.out.println("1. 👨‍💼 Employé");
+                        System.out.println("2. 💼 Professionnel");
+                        System.out.println("6. 🔙 Quitter");
+                        System.out.print("Choix : ");
+
+                        int choix1 = ValidationScanner.getIntegerInput();
+                        switch (choix1) {
+                            case 1:
+                                break;
+                            case 2:
+                                break;
+                            case 3:
+                                conRole2 = false;
+                                break;
+                            default:
+                                System.out.println("Choix Invalide!");
+                        }
+                    }                    break;
                 case 5:
+                    boolean conRole3 = true;
+                    while (conRole3) {
+                        System.out.println("\n🔹 Choisissez le rôle Role: ");
+                        System.out.println("1. 👨‍💼 Employé");
+                        System.out.println("2. 💼 Professionnel");
+                        System.out.println("6. 🔙 Quitter");
+                        System.out.print("Choix : ");
+
+                        int choix1 = ValidationScanner.getIntegerInput();
+                        switch (choix1) {
+                            case 1:
+                                break;
+                            case 2:
+                                break;
+                            case 3:
+                                conRole3 = false;
+                                break;
+                            default:
+                                System.out.println("Choix Invalide!");
+                        }
+                    }
                     break;
                 case 6:
+                    boolean conRole4 = true;
+                    while (conRole4) {
+                        System.out.println("\n🔹 Choisissez le rôle Role: ");
+                        System.out.println("1. 👨‍💼 Employé");
+                        System.out.println("2. 💼 Professionnel");
+                        System.out.println("6. 🔙 Quitter");
+                        System.out.print("Choix : ");
+
+                        int choix1 = ValidationScanner.getIntegerInput();
+                        switch (choix1) {
+                            case 1:
+                                break;
+                            case 2:
+                                break;
+                            case 3:
+                                conRole4 = false;
+                                break;
+                            default:
+                                System.out.println("Choix Invalide!");
+                        }
+                    }
+                    break;
+                case 7:
                     connection = false;
                     break;
                 default:
