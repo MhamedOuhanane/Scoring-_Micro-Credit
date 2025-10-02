@@ -7,9 +7,7 @@ import main.repository.interfaces.EcheanceRepository;
 import main.repository.interfaces.PersonRepository;
 import main.service.interfaces.CreditService;
 import main.service.interfaces.EcheanceService;
-import main.utils.DatabaseException;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -32,7 +30,7 @@ public class EcheanceServiceImpl implements EcheanceService {
             return echeanceRepository.insertEcheance(echeance)
                     .orElseThrow(() -> new RuntimeException("Impossible d'ajouter d'echeance"));
         } catch (RuntimeException e) {
-            throw new DatabaseException(e.getMessage(), e);
+            throw new RuntimeException(e.getMessage(), e);
         }
     }
 
@@ -69,7 +67,7 @@ public class EcheanceServiceImpl implements EcheanceService {
                     })
                     .collect(Collectors.toList());
         } catch (RuntimeException e) {
-            throw new DatabaseException(e.getMessage(), e);
+            throw new RuntimeException(e.getMessage(), e);
         }
     }
 
@@ -80,7 +78,7 @@ public class EcheanceServiceImpl implements EcheanceService {
             Echeance echeance = this.findEcheance(echeance_id);
             return echeanceRepository.deleteEcheance(echeance);
         } catch (RuntimeException e) {
-            throw new DatabaseException(e.getMessage(), e);
+            throw new RuntimeException(e.getMessage(), e);
         }
     }
 
@@ -93,7 +91,7 @@ public class EcheanceServiceImpl implements EcheanceService {
                     .sorted((ech1, ech2) -> ech1.getDateEcheance().compareTo(ech2.getDateEcheance()))
                     .collect(Collectors.toList());
         } catch (RuntimeException e) {
-            throw new DatabaseException(e.getMessage(), e);
+            throw new RuntimeException(e.getMessage(), e);
         }
     }
 
@@ -107,7 +105,7 @@ public class EcheanceServiceImpl implements EcheanceService {
                     .sorted((ech1, ech2) -> ech1.getDateEcheance().compareTo(ech2.getDateEcheance()))
                     .collect(Collectors.toList());
         } catch (RuntimeException e) {
-            throw new DatabaseException(e.getMessage(), e);
+            throw new RuntimeException(e.getMessage(), e);
         }
     }
 }

@@ -1,6 +1,7 @@
 package main.enums;
 
 public enum StatutPaiement {
+    PENDING("Paiement en attente"),
     PAYEATEMPS("Délai de paiement"),
     ENRETARD("En retard"),
     PAYEENRETARD("Paiement tardif"),

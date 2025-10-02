@@ -1,19 +1,17 @@
 package main.service.impl;
 
 import main.enums.EnumDecision;
+import main.enums.StatutPaiement;
 import main.model.Credit;
+import main.model.Echeance;
 import main.model.Employe;
 import main.model.Person;
-import main.repository.interfaces.CreditRepository;
-import main.repository.interfaces.EmployeRepository;
-import main.repository.interfaces.PersonRepository;
-import main.repository.interfaces.ProfessionnelRepository;
+import main.repository.interfaces.*;
 import main.service.interfaces.CreditService;
+import main.service.interfaces.EcheanceService;
 import main.service.interfaces.EmployeService;
 import main.service.interfaces.ProfessionnelService;
-import main.utils.DatabaseException;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -23,12 +21,14 @@ public class CreditServiceImpl implements CreditService {
     private final PersonRepository personRepository;
     private final EmployeService employeService;
     private final ProfessionnelService professionnelService;
+    private final EcheanceRepository echeanceRepository;
 
-    public CreditServiceImpl(CreditRepository creditRepository, PersonRepository personRepository, EmployeService employeService, ProfessionnelService professionnelService) {
+    public CreditServiceImpl(CreditRepository creditRepository, PersonRepository personRepository, EmployeService employeService, ProfessionnelService professionnelService, EcheanceRepository echeanceRepository) {
         this.creditRepository = creditRepository;
         this.personRepository = personRepository;
         this.employeService = employeService;
         this.professionnelService = professionnelService;
+        this.echeanceRepository = echeanceRepository;
     }
 
     @Override
@@ -69,10 +69,18 @@ public class CreditServiceImpl implements CreditService {
             }
 
             credit.generatedDureeMois(credit.getMontantOctroye());
-
-            return creditRepository.insertCredit(credit).orElseThrow(RuntimeException::new);
+            credit = creditRepository.insertCredit(credit).orElseThrow(RuntimeException::new);
+            Double montant = credit.getMontantDemande() + credit.getMontantDemande() * credit.getTauxInteret();
+            Double mensualite = ((int) (montant / credit.getDureeenMois())) + 1.;
+            System.out.println("Trouver credit: " + credit.getId() + "|" + credit.getDateCredit() + " | montant: " + montant + " | mon" + mensualite);
+            for (int i = 1; i <= credit.getDureeenMois(); i++) {
+                Echeance echeance = new Echeance(credit.getDateCredit().plusMonths(i), mensualite, null, StatutPaiement.PENDING, credit.getId());
+                echeance = echeanceRepository.insertEcheance(echeance)
+                        .orElseThrow(() -> new RuntimeException("Impossible d'ajouter d'echeance"));
+            }
+            return credit;
         } catch (RuntimeException e) {
-            throw new DatabaseException(e.getMessage(), e);
+            throw new RuntimeException(e.getMessage(), e);
         }
     }
 
@@ -109,7 +117,7 @@ public class CreditServiceImpl implements CreditService {
                     })
                     .collect(Collectors.toList());
         } catch (RuntimeException e) {
-            throw new DatabaseException(e.getMessage(), e);
+            throw new RuntimeException(e.getMessage(), e);
         }
     }
 
@@ -120,7 +128,7 @@ public class CreditServiceImpl implements CreditService {
             Credit credit = this.findCredit(id);
             return creditRepository.deleteCredit(credit);
         } catch (RuntimeException e) {
-            throw new DatabaseException(e.getMessage(), e);
+            throw new RuntimeException(e.getMessage(), e);
         }
     }
 
@@ -135,7 +143,7 @@ public class CreditServiceImpl implements CreditService {
                     })
                     .collect(Collectors.toList());
         } catch (RuntimeException e) {
-            throw new DatabaseException(e.getMessage(), e);
+            throw new RuntimeException(e.getMessage(), e);
         }
     }
 
@@ -148,7 +156,7 @@ public class CreditServiceImpl implements CreditService {
             }
             return 0.;
         } catch (RuntimeException e) {
-            throw new DatabaseException(e.getMessage(), e);
+            throw new RuntimeException(e.getMessage(), e);
         }
     }
 }

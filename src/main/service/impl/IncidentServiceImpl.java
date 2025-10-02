@@ -4,26 +4,25 @@ import main.model.Credit;
 import main.model.Echeance;
 import main.model.Incident;
 import main.model.Person;
+import main.repository.interfaces.CreditRepository;
 import main.repository.interfaces.IncidentRepository;
 import main.repository.interfaces.PersonRepository;
-import main.service.interfaces.CreditService;
 import main.service.interfaces.EcheanceService;
 import main.service.interfaces.IncidentService;
 import main.utils.DatabaseException;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class IncidentServiceImpl implements IncidentService {
     private final IncidentRepository incidentRepository;
-    private final CreditService creditService;
+    private final CreditRepository creditRepository;
     private final EcheanceService echeanceService;
     private final PersonRepository personRepository;
 
-    public IncidentServiceImpl(IncidentRepository incidentRepository, CreditService creditService, EcheanceService echeanceService, PersonRepository personRepository) {
+    public IncidentServiceImpl(IncidentRepository incidentRepository, CreditRepository creditRepository, EcheanceService echeanceService, PersonRepository personRepository) {
         this.incidentRepository = incidentRepository;
-        this.creditService = creditService;
+        this.creditRepository = creditRepository;
         this.echeanceService = echeanceService;
         this.personRepository = personRepository;
     }
@@ -78,7 +77,7 @@ public class IncidentServiceImpl implements IncidentService {
     public List<Incident> getCreditIncidents(Integer credit_id) {
         if (credit_id == null) throw new  IllegalArgumentException("L'id de credit ne peut pas être null");
         try {
-            Credit credit = creditService.findCredit(credit_id);
+            Credit credit = creditRepository.findCredit(credit_id).orElseThrow(RuntimeException::new);
             return echeanceService.selectCreditEcheances(credit_id).stream()
                     .flatMap(echeance -> this.getEcheanceIncidents(echeance.getId()).stream())
                     .sorted((inc1, inc2) -> inc1.getDateIncident().compareTo(inc2.getDateIncident()))

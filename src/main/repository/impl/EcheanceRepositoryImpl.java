@@ -4,7 +4,6 @@ import main.config.DatabaseConfig;
 import main.enums.StatutPaiement;
 import main.model.Echeance;
 import main.repository.interfaces.EcheanceRepository;
-import main.utils.DatabaseException;
 
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -15,13 +14,12 @@ public class EcheanceRepositoryImpl implements EcheanceRepository {
 
     @Override
     public Optional<Echeance> insertEcheance(Echeance echeance) {
-        String insertQuery = "INSERT INTO echeance (dateEcheance, mensualite, datePaiement, statutPaiement, credit_id) VALUES (?, ?, ?, ?, ?)";
+        String insertQuery = "INSERT INTO echeance (dateEcheance, mensualite, statutPaiement, credit_id) VALUES (?, ?, ?, ?)";
         try (PreparedStatement pstmt = conn.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS)) {
             pstmt.setTimestamp(1, Timestamp.valueOf(echeance.getDateEcheance()));
             pstmt.setDouble(2, echeance.getMensualite());
-            pstmt.setTimestamp(3, Timestamp.valueOf(echeance.getDatePaiement()));
-            pstmt.setString(4, echeance.getStatutPaiement().toString());
-            pstmt.setInt(5, echeance.getCredit_id());
+            pstmt.setString(3, echeance.getStatutPaiement().toString());
+            pstmt.setInt(4, echeance.getCredit_id());
 
             int rowsAff = pstmt.executeUpdate();
             if (rowsAff > 0) {
@@ -34,7 +32,7 @@ public class EcheanceRepositoryImpl implements EcheanceRepository {
             }
             return Optional.empty();
         } catch (SQLException e) {
-            throw new DatabaseException(e.getMessage(), e);
+            throw new RuntimeException(e.getMessage(), e);
         }
     }
 
@@ -56,7 +54,7 @@ public class EcheanceRepositoryImpl implements EcheanceRepository {
             }
             return Optional.empty();
         } catch (SQLException e) {
-            throw new DatabaseException(e.getMessage(), e);
+            throw new RuntimeException(e.getMessage(), e);
         }
     }
 
@@ -83,7 +81,7 @@ public class EcheanceRepositoryImpl implements EcheanceRepository {
             }
             return Optional.empty();
         } catch (SQLException e) {
-            throw new DatabaseException(e.getMessage(), e);
+            throw new RuntimeException(e.getMessage(), e);
         }
     }
 
@@ -105,7 +103,7 @@ public class EcheanceRepositoryImpl implements EcheanceRepository {
             }
             return echeances;
         } catch (SQLException e) {
-            throw new DatabaseException(e.getMessage(), e);
+            throw new RuntimeException(e.getMessage(), e);
         }
     }
 
@@ -117,7 +115,7 @@ public class EcheanceRepositoryImpl implements EcheanceRepository {
             int rowsAff = pstmt.executeUpdate();
             return rowsAff > 0;
         } catch (SQLException e) {
-            throw new DatabaseException(e.getMessage(), e);
+            throw new RuntimeException(e.getMessage(), e);
         }
     }
 
@@ -140,7 +138,7 @@ public class EcheanceRepositoryImpl implements EcheanceRepository {
             }
             return echeances;
         } catch (SQLException e) {
-            throw new DatabaseException(e.getMessage(), e);
+            throw new RuntimeException(e.getMessage(), e);
         }
     }
 }

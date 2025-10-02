@@ -8,7 +8,6 @@ import main.model.Employe;
 import main.model.Person;
 import main.repository.interfaces.EmployeRepository;
 import main.repository.interfaces.PersonRepository;
-import main.utils.DatabaseException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -43,7 +42,7 @@ public class EmployeRepositoryImp  implements EmployeRepository {
             }
             return Optional.empty();
         } catch (SQLException | RuntimeException e) {
-            throw new DatabaseException("Erreur SQL lors d'insertion du employe:" + e.getMessage(), e);
+            throw new RuntimeException("Erreur SQL lors d'insertion du employe:" + e.getMessage(), e);
         }
     }
 
@@ -68,7 +67,7 @@ public class EmployeRepositoryImp  implements EmployeRepository {
             }
             return Optional.empty();
         } catch (SQLException | RuntimeException e) {
-            throw new DatabaseException(e.getMessage(), e);
+            throw new RuntimeException(e.getMessage(), e);
         }
     }
 
@@ -108,7 +107,7 @@ public class EmployeRepositoryImp  implements EmployeRepository {
             }
             return Optional.empty();
         } catch (SQLException e) {
-            throw new DatabaseException(e.getMessage(), e);
+            throw new RuntimeException(e.getMessage(), e);
         }
     }
 
@@ -144,7 +143,7 @@ public class EmployeRepositoryImp  implements EmployeRepository {
             }
             return employes;
         } catch (SQLException e) {
-            throw new DatabaseException(e.getMessage(), e);
+            throw new RuntimeException(e.getMessage(), e);
         }
     }
 
@@ -161,7 +160,7 @@ public class EmployeRepositoryImp  implements EmployeRepository {
             }
             return false;
         } catch (SQLException e) {
-            throw new DatabaseException(e.getMessage(), e);
+            throw new RuntimeException(e.getMessage(), e);
         }
     }
 }

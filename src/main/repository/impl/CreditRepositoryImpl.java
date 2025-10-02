@@ -4,7 +4,6 @@ import main.config.DatabaseConfig;
 import main.enums.EnumDecision;
 import main.model.Credit;
 import main.repository.interfaces.CreditRepository;
-import main.utils.DatabaseException;
 
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -37,7 +36,7 @@ public class CreditRepositoryImpl implements CreditRepository {
             }
             return Optional.empty();
         } catch (SQLException e) {
-            throw new DatabaseException(e.getMessage(), e);
+            throw new RuntimeException(e.getMessage(), e);
         }
     }
 
@@ -62,7 +61,7 @@ public class CreditRepositoryImpl implements CreditRepository {
             }
             return Optional.empty();
         } catch (SQLException e) {
-            throw new DatabaseException(e.getMessage(), e);
+            throw new RuntimeException(e.getMessage(), e);
         }
     }
 
@@ -89,7 +88,7 @@ public class CreditRepositoryImpl implements CreditRepository {
             }
             return Optional.empty();
         } catch (SQLException e) {
-            throw new DatabaseException(e.getMessage(), e);
+            throw new RuntimeException(e.getMessage(), e);
         }
     }
 
@@ -114,7 +113,7 @@ public class CreditRepositoryImpl implements CreditRepository {
             }
             return credits;
         } catch (SQLException e) {
-            throw new DatabaseException(e.getMessage(), e);
+            throw new RuntimeException(e.getMessage(), e);
         }
     }
 
@@ -126,7 +125,7 @@ public class CreditRepositoryImpl implements CreditRepository {
             int rowsAff = pstmt.executeUpdate();
             return rowsAff > 0;
         } catch (SQLException e) {
-            throw new DatabaseException(e.getMessage(), e);
+            throw new RuntimeException(e.getMessage(), e);
         }
     }
 
@@ -152,7 +151,7 @@ public class CreditRepositoryImpl implements CreditRepository {
             }
             return credits;
         } catch (SQLException e) {
-            throw new DatabaseException(e.getMessage(), e);
+            throw new RuntimeException(e.getMessage(), e);
         }
     }
 }
