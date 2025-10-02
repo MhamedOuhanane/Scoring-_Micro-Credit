@@ -90,9 +90,7 @@ public class EcheanceServiceImpl implements EcheanceService {
         try {
             Credit credit = creditService.findCredit(id);
             return echeanceRepository.selectCreditEcheances(id).stream()
-                    .sorted((ech1, ech2) -> {
-                        return ech1.getDateEcheance().compareTo(ech2.getDateEcheance());
-                    })
+                    .sorted((ech1, ech2) -> ech1.getDateEcheance().compareTo(ech2.getDateEcheance()))
                     .collect(Collectors.toList());
         } catch (RuntimeException e) {
             throw new DatabaseException(e.getMessage(), e);
@@ -106,9 +104,7 @@ public class EcheanceServiceImpl implements EcheanceService {
             Person person = personRepository.findPerson(person_id).orElseThrow(RuntimeException::new);
             return creditService.getPersonCredits(person.getId()).stream()
                     .flatMap(credit -> this.selectCreditEcheances(credit.getId()).stream())
-                    .sorted((ech1, ech2) -> {
-                        return ech1.getDateEcheance().compareTo(ech2.getDateEcheance());
-                    })
+                    .sorted((ech1, ech2) -> ech1.getDateEcheance().compareTo(ech2.getDateEcheance()))
                     .collect(Collectors.toList());
         } catch (RuntimeException e) {
             throw new DatabaseException(e.getMessage(), e);
