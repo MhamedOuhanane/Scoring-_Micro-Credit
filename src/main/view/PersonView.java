@@ -10,7 +10,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PersonView {
+    private final EmployeView employeView;
 
+    public PersonView(EmployeView employeView) {
+        this.employeView = employeView;
+    }
 
     public void menuPerson() {
         boolean connection = true;
@@ -231,6 +235,6 @@ public class PersonView {
         }
         dataPerson.put("createdAt", LocalDate.now());
         dataPerson.put("score", score);
-        dataPerson.forEach((key, valeur) -> System.out.println("key: " + key + " | value:" + valeur.toString()) );
+        if (dataPerson.get("role") == EnumRole.EMPLOYE) employeView.createView(dataPerson);
     }
 }

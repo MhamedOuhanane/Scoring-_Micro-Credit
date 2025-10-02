@@ -1,6 +1,7 @@
 package main.enums;
 
 public enum EnumSecteur {
+    CDD("CDD/Intérim"),
     PUBLIC("Secteur public"),
     GRANDE_ENTREPRISE("Grandes entreprises"),
     PME("Petites et moyennes entreprises");

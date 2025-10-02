@@ -4,6 +4,7 @@ import main.repository.interfaces.*;
 import main.service.impl.*;
 import main.service.interfaces.*;
 import main.utils.ValidationScanner;
+import main.view.EmployeView;
 import main.view.PersonView;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
@@ -23,7 +24,8 @@ public class Main {
         EcheanceService echeanceService = new EcheanceServiceImpl(echeanceRepository, creditService, personRepository);
         IncidentService incidentService = new IncidentServiceImpl(incidentRepository, creditService, echeanceService, personRepository);
 
-        PersonView personView = new PersonView();
+        EmployeView employeView = new EmployeView();
+        PersonView personView = new PersonView(employeView);
 
         boolean connection = true;
         while (connection) {

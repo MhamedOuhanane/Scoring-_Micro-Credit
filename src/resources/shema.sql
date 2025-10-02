@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS employe (
     anciennete INT NOT NULL,
     poste VARCHAR(100) NOT NULL,
     typeContrat VARCHAR(255) NOT NULL,
-    secteur ENUM("PUBLIC", "GRANDE_ENTREPRISE", "PME") NOT NULL,
+    secteur ENUM("PUBLIC", "GRANDE_ENTREPRISE", "PME", "CDD") NOT NULL,
     FOREIGN KEY (id) REFERENCES person(id) ON DELETE CASCADE
 );
 
