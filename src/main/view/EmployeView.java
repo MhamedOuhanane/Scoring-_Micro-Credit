@@ -1,5 +1,6 @@
 package main.view;
 
+import main.controller.EmployeController;
 import main.enums.EnumSecteur;
 import main.model.Employe;
 import main.utils.ValidationScanner;
@@ -7,6 +8,11 @@ import main.utils.ValidationScanner;
 import java.util.Map;
 
 public class EmployeView {
+    private final EmployeController employeController;
+
+    public EmployeView(EmployeController employeController) {
+        this.employeController = employeController;
+    }
 
     public void createView(Map<String , Object> data) {
         int score = (int) data.get("score");
@@ -75,6 +81,11 @@ public class EmployeView {
         }
         score = score < 0 ? 0 : Math.min(score, 100);
         data.put("score", score);
-        data.forEach((key, valeur) -> System.out.println("key: " + key + " | value:" + valeur.toString()) );
+        Map<String, Object> result = this.employeController.create(data);
+        if (result.get("message") != "") {
+            System.out.println(result.get("message"));
+
+        } else if (result.get("erreur") != "") System.out.println(result.get("message"));
+
     }
 }

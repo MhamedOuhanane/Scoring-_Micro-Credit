@@ -1,4 +1,5 @@
 
+import main.controller.EmployeController;
 import main.repository.impl.*;
 import main.repository.interfaces.*;
 import main.service.impl.*;
@@ -24,7 +25,8 @@ public class Main {
         EcheanceService echeanceService = new EcheanceServiceImpl(echeanceRepository, creditService, personRepository);
         IncidentService incidentService = new IncidentServiceImpl(incidentRepository, creditService, echeanceService, personRepository);
 
-        EmployeView employeView = new EmployeView();
+        EmployeController employeController = new EmployeController(employeService);
+        EmployeView employeView = new EmployeView(employeController);
         PersonView personView = new PersonView(employeView);
 
         boolean connection = true;
