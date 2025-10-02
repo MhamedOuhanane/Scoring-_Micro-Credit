@@ -6,6 +6,7 @@ import main.model.Person;
 import main.utils.ValidationScanner;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -233,7 +234,7 @@ public class PersonView {
                     System.out.println("Choix Invalide!");
             }
         }
-        dataPerson.put("createdAt", LocalDate.now());
+        dataPerson.put("createdAt", LocalDateTime.now());
         dataPerson.put("score", score);
         if (dataPerson.get("role") == EnumRole.EMPLOYE) employeView.createView(dataPerson);
     }

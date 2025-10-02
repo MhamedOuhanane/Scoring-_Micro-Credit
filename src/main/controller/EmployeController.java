@@ -28,7 +28,7 @@ public class EmployeController {
             result.put("erreur", "");
 
             return result;
-        } catch (RuntimeException e) {
+        } catch (Exception e) {
             result.put("erreur", "❌ Erreur: " + e.getMessage());
             result.put("employe", "");
             result.put("message", "");
