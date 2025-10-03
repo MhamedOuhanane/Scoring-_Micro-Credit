@@ -24,10 +24,11 @@ public class Main {
         EcheanceRepository echeanceRepository = new EcheanceRepositoryImpl();
         IncidentRepository incidentRepository = new IncidentRepositoryImpl();
 
+        PersonService personService = new PersonServiceImpl(personRepository);
         EmployeService employeService = new EmployeServiceImpl(employeRepository, personRepository);
         ProfessionnelService professionnelService = new ProfessionnelServiceImpl(professionnelRepository, personRepository);
         CreditService creditService = new CreditServiceImpl(creditRepository, personRepository, employeService, professionnelService, echeanceRepository);
-        EcheanceService echeanceService = new EcheanceServiceImpl(echeanceRepository, creditService, personRepository);
+        EcheanceService echeanceService = new EcheanceServiceImpl(echeanceRepository, creditService, personService, incidentRepository);
         IncidentService incidentService = new IncidentServiceImpl(incidentRepository, creditService, echeanceService, personRepository);
 
         EmployeController employeController = new EmployeController(employeService);

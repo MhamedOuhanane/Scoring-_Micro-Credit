@@ -19,11 +19,10 @@ public class CreditView {
         while (connection) {
             System.out.println("\n===== MENU Conseiller =====");
             System.out.println("1. Ajouter un Credit");
-            System.out.println("2. Supprimer un Credit");
-            System.out.println("3. Rechercher un Credit par son ID");
-            System.out.println("4. Afficher les Echecances d'un Credit");
-            System.out.println("5. Afficher les Incidents d'un Credit");
-            System.out.println("6. Quitter");
+            System.out.println("2. Rechercher un Credit par son ID");
+            System.out.println("3. Afficher les Echecances d'un Credit");
+            System.out.println("4. Afficher les Incidents d'un Credit");
+            System.out.println("5. Quitter");
             System.out.print("Choix : ");
 
             int choix = ValidationScanner.getIntegerInput();
@@ -40,9 +39,6 @@ public class CreditView {
                 case 4:
                     break;
                 case 5:
-
-                    break;
-                case 6:
                     connection = false;
                     break;
                 default:
