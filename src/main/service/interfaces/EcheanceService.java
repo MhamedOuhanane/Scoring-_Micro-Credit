@@ -13,4 +13,5 @@ public interface EcheanceService {
     List<Echeance> getAllEcheances();
     Boolean deleteEcheance(Integer echeance_id);
     List<Echeance> selectPersonEcheances(Integer person_id);
+    void traitementEcheance();
 }

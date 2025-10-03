@@ -104,20 +104,21 @@ public class EcheanceServiceImpl implements EcheanceService {
         }
     }
 
+    @Override
     public void traitementEcheance() {
         try {
             LocalDateTime now = LocalDateTime.now();
             List<Echeance> echeances = this.getAllEcheances();
             echeances.stream()
-                    .filter(echeance -> echeance.getDateEcheance().isAfter(now.plusDays(5)))
-                    .filter(echeance -> echeance.getStatutPaiement().equals(StatutPaiement.IMPAYEREGLE)
-                        || echeance.getStatutPaiement().equals(StatutPaiement.PAYEATEMPS)
-                        || echeance.getStatutPaiement().equals(StatutPaiement.PAYEENRETARD))
+                    .filter(echeance -> echeance.getDateEcheance().isBefore(now.minusDays(5)))
+                    .filter(echeance -> !echeance.getStatutPaiement().equals(StatutPaiement.IMPAYEREGLE)
+                        && !echeance.getStatutPaiement().equals(StatutPaiement.PAYEATEMPS)
+                        && !echeance.getStatutPaiement().equals(StatutPaiement.PAYEENRETARD))
                     .forEach(echeance -> {
-                        Person person = this.personService.findPerson(this.creditService.findCredit(echeance.getId()).getPerson_id());
+                        Person person = this.personService.findPerson(this.creditService.findCredit(echeance.getCredit_id()).getPerson_id());
                         int score = person.getScore();
                         StatutPaiement statutPaiement = echeance.getStatutPaiement();
-                        if (echeance.getDateEcheance().isBefore(now.plusDays(31))) {
+                        if (echeance.getDateEcheance().isAfter(now.minusDays(31))) {
                             if (echeance.getStatutPaiement().equals(StatutPaiement.PENDING)) {
                                 statutPaiement = StatutPaiement.ENRETARD;
                                 score -= 3;
@@ -126,13 +127,18 @@ public class EcheanceServiceImpl implements EcheanceService {
                             statutPaiement = StatutPaiement.IMPAYENONREGLE;
                             score -= 10;
                         }
-                        if (echeance.getStatutPaiement().equals(statutPaiement)) {
+
+                        if (!echeance.getStatutPaiement().equals(statutPaiement)) {
+                            Map<String, Object> updates = new HashMap<>();
+                            updates.put("statutPaiement", statutPaiement.toString());
+                            this.updateEcheance(echeance.getId(), updates);
                             Incident incident = new Incident(LocalDateTime.now(), score, statutPaiement, echeance.getId());
                             incident = incidentRepository.insertIncident(incident)
                                     .orElseThrow(() -> new RuntimeException("Impossible d'ajouter d'incident"));
-                            Map<String , Object> updates = new HashMap<>();
-                            updates.put("score", score);
-                            person = personService.updatePerson(person.getId(), updates);
+                            Map<String , Object> update = new HashMap<>();
+                            score = score < 0 ? 0 : Math.min(score, 100);
+                            update.put("score", score);
+                            person = personService.updatePerson(person.getId(), update);
                         }
                     });
         } catch (RuntimeException e) {

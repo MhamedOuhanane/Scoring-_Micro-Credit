@@ -52,7 +52,10 @@ public class CreditServiceImpl implements CreditService {
             Integer score = person.getScore();
             switch (existence) {
                 case "nouveau":
-                    if (score >= 70) {
+                    if (score >= 80) {
+                        if (credit.getMontantDemande() > 4 * salaire) credit.setMontantOctroye(4 * salaire);
+                        credit.setDecision(EnumDecision.ACCORDIMMEDIAT);
+                    } if (score >= 70) {
                         if (credit.getMontantDemande() > 4 * salaire) credit.setMontantOctroye(4 * salaire);
                         credit.setDecision(EnumDecision.ETUDEMANUELLE);
                     } else  {
@@ -79,7 +82,7 @@ public class CreditServiceImpl implements CreditService {
             credit.generatedDureeMois(credit.getMontantOctroye());
 
             credit = creditRepository.insertCredit(credit).orElseThrow(() -> new RuntimeException("Impossiple de l'insertion ce credit"));
-            if (!credit.getDecision().equals(EnumDecision.REFUS_AUTOMATIQUE)) {
+            if (credit.getDecision().equals(EnumDecision.ACCORDIMMEDIAT)) {
                 Double montant = credit.getMontantOctroye() + credit.getMontantOctroye() * credit.getTauxInteret();
                 Double mensualite = ((int) (montant / credit.getDureeenMois())) + 1.;
                 for (int i = 1; i <= credit.getDureeenMois(); i++) {

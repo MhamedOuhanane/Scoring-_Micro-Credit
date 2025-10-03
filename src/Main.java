@@ -1,5 +1,6 @@
 
 import main.controller.CreditController;
+import main.controller.EcheanceController;
 import main.controller.EmployeController;
 import main.controller.ProfessionnelController;
 import main.model.Professionnel;
@@ -12,6 +13,8 @@ import main.view.CreditView;
 import main.view.EmployeView;
 import main.view.PersonView;
 import main.view.ProfessionnelView;
+
+import java.time.LocalDateTime;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -39,6 +42,10 @@ public class Main {
         ProfessionnelView professionnelView = new ProfessionnelView(professionnelController);
         PersonView personView = new PersonView(employeView, professionnelView);
         CreditView creditView = new CreditView(creditController);
+        EcheanceController echeanceController = new EcheanceController(echeanceService);
+
+        // Schedules
+        echeanceController.scheduleTraitementDate();
 
         boolean connection = true;
         while (connection) {

@@ -244,4 +244,6 @@ public class PersonView {
         if (dataPerson.get("role") == EnumRole.EMPLOYE) employeView.createView(dataPerson);
         else this.professionnelView.createView(dataPerson);
     }
+
+//    private void payeEch
 }
