@@ -1,5 +1,7 @@
 
 import main.controller.EmployeController;
+import main.controller.ProfessionnelController;
+import main.model.Professionnel;
 import main.repository.impl.*;
 import main.repository.interfaces.*;
 import main.service.impl.*;
@@ -7,6 +9,7 @@ import main.service.interfaces.*;
 import main.utils.ValidationScanner;
 import main.view.EmployeView;
 import main.view.PersonView;
+import main.view.ProfessionnelView;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -26,8 +29,11 @@ public class Main {
         IncidentService incidentService = new IncidentServiceImpl(incidentRepository, creditService, echeanceService, personRepository);
 
         EmployeController employeController = new EmployeController(employeService);
+        ProfessionnelController professionnelController = new ProfessionnelController(professionnelService);
+
         EmployeView employeView = new EmployeView(employeController);
-        PersonView personView = new PersonView(employeView);
+        ProfessionnelView professionnelView = new ProfessionnelView(professionnelController);
+        PersonView personView = new PersonView(employeView, professionnelView);
 
         boolean connection = true;
         while (connection) {

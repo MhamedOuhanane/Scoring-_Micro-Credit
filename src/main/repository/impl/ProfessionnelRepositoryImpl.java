@@ -7,7 +7,6 @@ import main.model.Professionnel;
 import main.model.Person;
 import main.repository.interfaces.PersonRepository;
 import main.repository.interfaces.ProfessionnelRepository;
-import main.utils.DatabaseException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -25,7 +24,7 @@ public class ProfessionnelRepositoryImpl implements ProfessionnelRepository {
     public Optional<Professionnel> insertProfessionnel(Professionnel professionnel) {
         String insertQuery = "INSERT INTO professionnel (id, revenu, immatriculationFiscale, secteurActivite, Activite) VALUES (?, ?, ?, ?, ?)";
         try {
-            Person person = personRepository.insertPerson(professionnel).orElseThrow(RuntimeException::new);
+            Person person = personRepository.insertPerson(professionnel).orElseThrow(() -> new RuntimeException("Erreur lors de l'insertion de person"));
             PreparedStatement pstmt = conn.prepareStatement(insertQuery);
             pstmt.setInt(1, person.getId());
             pstmt.setDouble(2, professionnel.getRevenu());
@@ -41,7 +40,7 @@ public class ProfessionnelRepositoryImpl implements ProfessionnelRepository {
             }
             return Optional.empty();
         } catch (SQLException | RuntimeException e) {
-            throw new DatabaseException("Erreur SQL lors d'insertion du professionnel:" + e.getMessage(), e);
+            throw new RuntimeException("Erreur SQL lors d'insertion du professionnel:" + e.getMessage(), e);
         }
     }
 
@@ -65,7 +64,7 @@ public class ProfessionnelRepositoryImpl implements ProfessionnelRepository {
             }
             return Optional.empty();
         } catch (SQLException | RuntimeException e) {
-            throw new DatabaseException(e.getMessage(), e);
+            throw new RuntimeException(e.getMessage(), e);
         }
     }
 
@@ -105,7 +104,7 @@ public class ProfessionnelRepositoryImpl implements ProfessionnelRepository {
             }
             return Optional.empty();
         } catch (SQLException e) {
-            throw new DatabaseException(e.getMessage(), e);
+            throw new RuntimeException(e.getMessage(), e);
         }
     }
 
@@ -140,7 +139,7 @@ public class ProfessionnelRepositoryImpl implements ProfessionnelRepository {
             }
             return professionnels;
         } catch (SQLException e) {
-            throw new DatabaseException(e.getMessage(), e);
+            throw new RuntimeException(e.getMessage(), e);
         }
     }
 
@@ -157,7 +156,7 @@ public class ProfessionnelRepositoryImpl implements ProfessionnelRepository {
             }
             return false;
         } catch (SQLException e) {
-            throw new DatabaseException(e.getMessage(), e);
+            throw new RuntimeException(e.getMessage(), e);
         }
     }
 }

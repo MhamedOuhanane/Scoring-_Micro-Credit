@@ -24,11 +24,11 @@ public class EmployeController {
             for (String key : data.keySet()) if (data.get(key) == null) throw new RuntimeException("La valeur de " + key + " ne peut pas être null");
             Employe employe = this.employeService.ajouterEmploye(this.instancedEmp(data));
             result.put("employe", employe);
-            result.put("message", "✅ Le client est ajouter avec success:");
+            result.put("message", "✅ Le client est ajouter avec success");
             result.put("erreur", "");
 
             return result;
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             result.put("erreur", "❌ Erreur: " + e.getMessage());
             result.put("employe", "");
             result.put("message", "");

@@ -84,8 +84,7 @@ public class EmployeView {
         Map<String, Object> result = this.employeController.create(data);
         if (result.get("message") != "") {
             System.out.println(result.get("message"));
-        }
-        if (result.get("erreur") != "") System.out.println(result.get("message"));
+        } else if (result.get("erreur") != "") System.out.println(result.get("erreur"));
 
     }
 }

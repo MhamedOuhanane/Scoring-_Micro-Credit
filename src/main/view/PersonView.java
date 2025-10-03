@@ -1,5 +1,6 @@
 package main.view;
 
+import main.controller.ProfessionnelController;
 import main.enums.EnumRole;
 import main.enums.EnumSitFam;
 import main.model.Person;
@@ -12,9 +13,11 @@ import java.util.Map;
 
 public class PersonView {
     private final EmployeView employeView;
+    private final ProfessionnelView professionnelView;
 
-    public PersonView(EmployeView employeView) {
+    public PersonView(EmployeView employeView, ProfessionnelView professionnelView) {
         this.employeView = employeView;
+        this.professionnelView = professionnelView;
     }
 
     public void menuPerson() {
@@ -237,5 +240,6 @@ public class PersonView {
         dataPerson.put("createdAt", LocalDateTime.now());
         dataPerson.put("score", score);
         if (dataPerson.get("role") == EnumRole.EMPLOYE) employeView.createView(dataPerson);
+        else this.professionnelView.createView(dataPerson);
     }
 }
