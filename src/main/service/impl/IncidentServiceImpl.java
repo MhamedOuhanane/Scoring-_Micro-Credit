@@ -79,7 +79,7 @@ public class IncidentServiceImpl implements IncidentService {
         if (credit_id == null) throw new  IllegalArgumentException("L'id de credit ne peut pas être null");
         try {
             Credit credit = creditService.findCredit(credit_id);
-            return echeanceService.selectCreditEcheances(credit_id).stream()
+            return this.creditService.selectCreditEcheances(credit_id).stream()
                     .flatMap(echeance -> this.getEcheanceIncidents(echeance.getId()).stream())
                     .sorted((inc1, inc2) -> inc1.getDateIncident().compareTo(inc2.getDateIncident()))
                     .collect(Collectors.toList());

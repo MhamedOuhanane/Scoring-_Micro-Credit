@@ -42,6 +42,15 @@ public class Credit {
         this.person_id = person_id;
     }
 
+    public Credit(LocalDateTime dateCredit, Double montantDemande, Double montantOctroye, String typeCredit, Integer person_id
+    ) {
+        this.dateCredit = dateCredit;
+        this.montantDemande = montantDemande;
+        this.montantOctroye = montantOctroye;
+        this.typeCredit = typeCredit;
+        this.person_id = person_id;
+    }
+
     public Integer getId() {
         return id;
     }

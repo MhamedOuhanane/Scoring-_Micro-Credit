@@ -83,25 +83,12 @@ public class EcheanceServiceImpl implements EcheanceService {
     }
 
     @Override
-    public List<Echeance> selectCreditEcheances(Integer id) {
-        if (id == null) throw new  IllegalArgumentException("L'id de credit ne peut pas être null");
-        try {
-            Credit credit = creditService.findCredit(id);
-            return echeanceRepository.selectCreditEcheances(id).stream()
-                    .sorted((ech1, ech2) -> ech1.getDateEcheance().compareTo(ech2.getDateEcheance()))
-                    .collect(Collectors.toList());
-        } catch (RuntimeException e) {
-            throw new RuntimeException(e.getMessage(), e);
-        }
-    }
-
-    @Override
     public List<Echeance> selectPersonEcheances(Integer person_id) {
         if (person_id == null) throw new  IllegalArgumentException("L'id de person ne peut pas être null");
         try {
             Person person = personRepository.findPerson(person_id).orElseThrow(RuntimeException::new);
             return creditService.getPersonCredits(person.getId()).stream()
-                    .flatMap(credit -> this.selectCreditEcheances(credit.getId()).stream())
+                    .flatMap(credit -> this.creditService.selectCreditEcheances(credit.getId()).stream())
                     .sorted((ech1, ech2) -> ech1.getDateEcheance().compareTo(ech2.getDateEcheance()))
                     .collect(Collectors.toList());
         } catch (RuntimeException e) {

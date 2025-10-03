@@ -35,11 +35,19 @@ public class CreditServiceImpl implements CreditService {
     public Credit ajouterCredit(Credit credit) {
         if (credit == null) throw new IllegalArgumentException("Les information de credit ne peut pas être null");
         try {
-            Person person = personRepository.findPerson(credit.getPerson_id()).orElseThrow(RuntimeException::new);
+            Credit finalCredit = credit;
+            Person person = personRepository.findPerson(credit.getPerson_id()).orElseThrow(() -> new RuntimeException("Aucun client trouvé avec l'id: " + finalCredit.getPerson_id()));
             Double salaire = this.touverSalaire(person.getRole().getDescription(), credit.getPerson_id());
             List<Credit> credits = this.getPersonCredits(person.getId()).stream()
-                    .filter(credit1 -> credit1.getDecision().equals(EnumDecision.REFUS_AUTOMATIQUE))
+                    .filter(credit1 -> !credit1.getDecision().equals(EnumDecision.REFUS_AUTOMATIQUE))
                     .collect(Collectors.toList());
+            List<Echeance> echeancesPerson = this.getPersonCredits(person.getId()).stream()
+                    .flatMap(credit1 -> this.selectCreditEcheances(credit1.getId()).stream())
+                    .filter(cr -> cr.getStatutPaiement().equals(StatutPaiement.IMPAYENONREGLE)
+                            || cr.getStatutPaiement().equals(StatutPaiement.ENRETARD)
+                            || cr.getStatutPaiement().equals(StatutPaiement.PENDING))
+                    .collect(Collectors.toList());
+            if (!echeancesPerson.isEmpty()) throw new RuntimeException("Vous ne pouvez pas obtenir de nouveau crédit car il a " + echeancesPerson.size() + " échéance(s) impayée(s).");
             String existence = credits.isEmpty() ? "nouveau" : "existant";
             Integer score = person.getScore();
             switch (existence) {
@@ -69,18 +77,19 @@ public class CreditServiceImpl implements CreditService {
             }
 
             credit.generatedDureeMois(credit.getMontantOctroye());
-            credit = creditRepository.insertCredit(credit).orElseThrow(RuntimeException::new);
-            Double montant = credit.getMontantDemande() + credit.getMontantDemande() * credit.getTauxInteret();
 
-            Double mensualite = ((int) (montant / credit.getDureeenMois())) + 1.;
-            System.out.println("Trouver credit: " + credit.getId() + "|" + credit.getDateCredit() + " | montant: " + montant + " | mon" + mensualite);
-            for (int i = 1; i <= credit.getDureeenMois(); i++) {
-                Echeance echeance = new Echeance(credit.getDateCredit().plusMonths(i), mensualite, null, StatutPaiement.PENDING, credit.getId());
-                echeance = echeanceRepository.insertEcheance(echeance)
-                        .orElseThrow(() -> new RuntimeException("Impossible d'ajouter d'echeance"));
+            credit = creditRepository.insertCredit(credit).orElseThrow(() -> new RuntimeException("Impossiple de l'insertion ce credit"));
+            if (!credit.getDecision().equals(EnumDecision.REFUS_AUTOMATIQUE)) {
+                Double montant = credit.getMontantOctroye() + credit.getMontantOctroye() * credit.getTauxInteret();
+                Double mensualite = ((int) (montant / credit.getDureeenMois())) + 1.;
+                for (int i = 1; i <= credit.getDureeenMois(); i++) {
+                    Echeance echeance = new Echeance(credit.getDateCredit().plusMonths(i), mensualite, null, StatutPaiement.PENDING, credit.getId());
+                    echeance = echeanceRepository.insertEcheance(echeance)
+                            .orElseThrow(() -> new RuntimeException("Impossible d'ajouter d'echeance"));
+                }
             }
             return credit;
-        } catch (RuntimeException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e.getMessage(), e);
         }
     }
@@ -137,7 +146,7 @@ public class CreditServiceImpl implements CreditService {
     public List<Credit> getPersonCredits(Integer person_id) {
         if (person_id == null) throw new  IllegalArgumentException("L'id credit ne peut pas être null");
         try {
-            Person person = personRepository.findPerson(person_id).orElseThrow(RuntimeException::new);
+            Person person = personRepository.findPerson(person_id).orElseThrow(() -> new RuntimeException("Aucun client trouvé avec l'id: " + person_id));
             return creditRepository.selectPersonCredits(person_id).stream()
                     .sorted((cd1, cd2) -> {
                         return cd1.getDateCredit().compareTo(cd2.getDateCredit());
@@ -156,6 +165,19 @@ public class CreditServiceImpl implements CreditService {
                 return this.professionnelService.findProfessionnel(person_id).getRevenu();
             }
             return 0.;
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public List<Echeance> selectCreditEcheances(Integer id) {
+        if (id == null) throw new  IllegalArgumentException("L'id de credit ne peut pas être null");
+        try {
+            Credit credit = this.findCredit(id);
+            return echeanceRepository.selectCreditEcheances(id).stream()
+                    .sorted((ech1, ech2) -> ech1.getDateEcheance().compareTo(ech2.getDateEcheance()))
+                    .collect(Collectors.toList());
         } catch (RuntimeException e) {
             throw new RuntimeException(e.getMessage(), e);
         }

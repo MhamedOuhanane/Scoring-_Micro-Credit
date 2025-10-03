@@ -12,6 +12,5 @@ public interface EcheanceService {
     Echeance updateEcheance(Integer echean_id, Map<String, Object> updates);
     List<Echeance> getAllEcheances();
     Boolean deleteEcheance(Integer echeance_id);
-    List<Echeance> selectCreditEcheances(Integer id);
     List<Echeance> selectPersonEcheances(Integer person_id);
 }

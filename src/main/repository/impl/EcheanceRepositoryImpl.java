@@ -46,7 +46,8 @@ public class EcheanceRepositoryImpl implements EcheanceRepository {
                 Integer echeanceId = resultSet.getInt("id");
                 LocalDateTime dateEcheance = resultSet.getTimestamp("dateEcheance").toLocalDateTime();;
                 Double mensualite = resultSet.getDouble("mensualite");;
-                LocalDateTime datePaiement = resultSet.getTimestamp("datePaiement").toLocalDateTime();;
+                Timestamp tsDatePaiement = resultSet.getTimestamp("datePaiement");
+                LocalDateTime datePaiement = tsDatePaiement != null ? tsDatePaiement.toLocalDateTime() : null;
                 StatutPaiement statutPaiement = StatutPaiement.valueOf(resultSet.getString("statutPaiement"));;
                 Integer credit_id = resultSet.getInt("credit_id");
 
@@ -93,11 +94,12 @@ public class EcheanceRepositoryImpl implements EcheanceRepository {
             List<Echeance> echeances = new ArrayList<>();
             while (resultSet.next()) {
                 Integer echeanceId = resultSet.getInt("id");
-                LocalDateTime dateEcheance = resultSet.getTimestamp("dateEcheance").toLocalDateTime();;
-                Double mensualite = resultSet.getDouble("mensualite");;
-                LocalDateTime datePaiement = resultSet.getTimestamp("datePaiement").toLocalDateTime();;
-                StatutPaiement statutPaiement = StatutPaiement.valueOf(resultSet.getString("statutPaiement"));;
-                Integer credit_id = resultSet.getInt("credit_id");;
+                LocalDateTime dateEcheance = resultSet.getTimestamp("dateEcheance").toLocalDateTime();
+                Double mensualite = resultSet.getDouble("mensualite");
+                Timestamp tsDatePaiement = resultSet.getTimestamp("datePaiement");
+                LocalDateTime datePaiement = tsDatePaiement != null ? tsDatePaiement.toLocalDateTime() : null;
+                StatutPaiement statutPaiement = StatutPaiement.valueOf(resultSet.getString("statutPaiement"));
+                Integer credit_id = resultSet.getInt("credit_id");
 
                 echeances.add(new Echeance(echeanceId, dateEcheance, mensualite, datePaiement, statutPaiement, credit_id));
             }
@@ -129,8 +131,9 @@ public class EcheanceRepositoryImpl implements EcheanceRepository {
             while (resultSet.next()) {
                 Integer echeanceId = resultSet.getInt("id");
                 LocalDateTime dateEcheance = resultSet.getTimestamp("dateEcheance").toLocalDateTime();;
-                Double mensualite = resultSet.getDouble("mensualite");;
-                LocalDateTime datePaiement = resultSet.getTimestamp("datePaiement").toLocalDateTime();;
+                Double mensualite = resultSet.getDouble("mensualite");
+                Timestamp tsDatePaiement = resultSet.getTimestamp("datePaiement");
+                LocalDateTime datePaiement = tsDatePaiement != null ? tsDatePaiement.toLocalDateTime() : null;
                 StatutPaiement statutPaiement = StatutPaiement.valueOf(resultSet.getString("statutPaiement"));;
                 Integer credit_id = resultSet.getInt("credit_id");;
 

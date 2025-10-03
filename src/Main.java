@@ -1,4 +1,5 @@
 
+import main.controller.CreditController;
 import main.controller.EmployeController;
 import main.controller.ProfessionnelController;
 import main.model.Professionnel;
@@ -7,6 +8,7 @@ import main.repository.interfaces.*;
 import main.service.impl.*;
 import main.service.interfaces.*;
 import main.utils.ValidationScanner;
+import main.view.CreditView;
 import main.view.EmployeView;
 import main.view.PersonView;
 import main.view.ProfessionnelView;
@@ -30,10 +32,12 @@ public class Main {
 
         EmployeController employeController = new EmployeController(employeService);
         ProfessionnelController professionnelController = new ProfessionnelController(professionnelService);
+        CreditController creditController = new CreditController(creditService);
 
         EmployeView employeView = new EmployeView(employeController);
         ProfessionnelView professionnelView = new ProfessionnelView(professionnelController);
         PersonView personView = new PersonView(employeView, professionnelView);
+        CreditView creditView = new CreditView(creditController);
 
         boolean connection = true;
         while (connection) {
@@ -52,6 +56,7 @@ public class Main {
                     personView.menuPerson();
                     break;
                 case 2:
+                    creditView.menuCredit();
                     break;
                 case 3:
                     break;
