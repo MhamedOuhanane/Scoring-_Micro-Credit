@@ -2,8 +2,8 @@ package main.service.impl;
 
 import main.model.Employe;
 import main.repository.interfaces.EmployeRepository;
+import main.repository.interfaces.PersonRepository;
 import main.service.interfaces.EmployeService;
-import main.utils.DatabaseException;
 
 import java.util.List;
 import java.util.Map;
@@ -11,9 +11,11 @@ import java.util.stream.Collectors;
 
 public class EmployeServiceImpl implements EmployeService {
     private final EmployeRepository employeRepository;
+    private final PersonRepository personRepository;
 
-    public EmployeServiceImpl(EmployeRepository employeRepository) {
+    public EmployeServiceImpl(EmployeRepository employeRepository, PersonRepository personRepository) {
         this.employeRepository = employeRepository;
+        this.personRepository = personRepository;
     }
 
 
@@ -24,7 +26,7 @@ public class EmployeServiceImpl implements EmployeService {
             return employeRepository.insertEmploye(employe)
                     .orElseThrow(() -> new RuntimeException("Impossible d'ajouter l'employe: " + employe.getNom() + employe.getPrenom()));
         } catch (RuntimeException e) {
-            throw new DatabaseException(e.getMessage(), e);
+            throw new RuntimeException(e.getMessage(), e);
         }
     }
 
@@ -33,7 +35,7 @@ public class EmployeServiceImpl implements EmployeService {
         if (id == null) throw new  IllegalArgumentException("L'id employe ne peut pas être null");
         try {
             return employeRepository.findEmploye(id)
-                    .orElseThrow((() -> new RuntimeException("Aucun employe trouvé avec l'id: " + id)));
+                    .orElseThrow(() -> new RuntimeException("Aucun employe trouvé avec l'id: " + id));
         } catch (RuntimeException e) {
             throw new RuntimeException(e.getMessage(), e);
         }
@@ -63,7 +65,7 @@ public class EmployeServiceImpl implements EmployeService {
                     })
                     .collect(Collectors.toList());
         } catch (RuntimeException e) {
-            throw new DatabaseException(e.getMessage(), e);
+            throw new RuntimeException(e.getMessage(), e);
         }
     }
 
@@ -72,9 +74,9 @@ public class EmployeServiceImpl implements EmployeService {
         if (id == null) throw new  IllegalArgumentException("L'id d'employe ne peut pas être null");
         try {
             Employe employe = this.findEmploye(id);
-            return employeRepository.deleteEmploye(employe);
+            return personRepository.deletePerson(employe);
         } catch (RuntimeException e) {
-            throw new DatabaseException(e.getMessage(), e);
+            throw new RuntimeException(e.getMessage(), e);
         }
     }
 }

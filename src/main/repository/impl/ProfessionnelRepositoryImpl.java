@@ -34,7 +34,7 @@ public class ProfessionnelRepositoryImpl implements ProfessionnelRepository {
 
             int rowsAff = pstmt.executeUpdate();
             if (rowsAff > 0) {
-                Professionnel newProfessionnel = this.findProfessionnel(person.getId()).orElseThrow(RuntimeException::new);
+                Professionnel newProfessionnel = this.findProfessionnel(person.getId()).orElseThrow(() -> new RuntimeException("Aucun Client Professionnwl trouvé avec l'id: " + person.getId()));
 
                 return Optional.of(newProfessionnel);
             }
@@ -48,7 +48,7 @@ public class ProfessionnelRepositoryImpl implements ProfessionnelRepository {
     public Optional<Professionnel> findProfessionnel(Integer id) {
         String findQurey = "SELECT * FROM professionnel WHERE id = ?";
         try {
-            Person person = personRepository.findPerson(id).orElseThrow(RuntimeException::new);
+            Person person = personRepository.findPerson(id).orElseThrow(() -> new RuntimeException("Aucun Client Professionnwl trouvé avec l'id: " + id));
             Professionnel professionnel = new Professionnel(person.getId(), person.getNom(), person.getPrenom(), person.getEmail(), person.getDateNaissance(), person.getVille(), person.getNombreEnfants(), person.getInvestissement(), person.getPlacement(), person.getSituationFamiliale(), person.getCreatedAt(), person.getScore(), person.getRole());
             PreparedStatement pstmt = conn.prepareStatement(findQurey);
             pstmt.setInt(1, id);
@@ -91,7 +91,7 @@ public class ProfessionnelRepositoryImpl implements ProfessionnelRepository {
         updatePerfoQueryStr += " WHERE id = ?";
 
         try {
-            if (updatePerson) personRepository.updatePerson(professionnel, listUpdatesPerson).orElseThrow(RuntimeException::new);
+            if (updatePerson) personRepository.updatePerson(professionnel, listUpdatesPerson).orElseThrow(() -> new RuntimeException("Aucun employe trouvé avec l'id"));
             PreparedStatement pstmt = conn.prepareStatement(updatePerfoQueryStr);
             i = 1;
             for (String key : updates.keySet()) {
@@ -138,23 +138,6 @@ public class ProfessionnelRepositoryImpl implements ProfessionnelRepository {
                         revenu, immatriculationFiscale, secteurActivite, Activite));
             }
             return professionnels;
-        } catch (SQLException e) {
-            throw new RuntimeException(e.getMessage(), e);
-        }
-    }
-
-    @Override
-    public Boolean deleteProfessionnel(Professionnel professionnel) {
-        String deleteQuery = "DELETE FROM professionnel WHERE id = ?";
-        try {
-            boolean deletePerson = personRepository.deletePerson(professionnel);
-            if (deletePerson) {
-                PreparedStatement pstmt = conn.prepareStatement(deleteQuery);
-                pstmt.setInt(1, professionnel.getId());
-                int rowsAff = pstmt.executeUpdate();
-                return rowsAff > 0;
-            }
-            return false;
         } catch (SQLException e) {
             throw new RuntimeException(e.getMessage(), e);
         }

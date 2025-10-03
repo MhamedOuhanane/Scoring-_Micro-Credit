@@ -11,5 +11,4 @@ public interface EmployeRepository {
     Optional<Employe> findEmploye(Integer id);
     Optional<Employe> updateEmploye(Employe empl, Map<String, Object> update);
     List<Employe> selectEmployes();
-    Boolean deleteEmploye(Employe employe);
 }

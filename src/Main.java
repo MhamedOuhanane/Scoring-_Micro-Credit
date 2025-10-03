@@ -24,8 +24,8 @@ public class Main {
         EcheanceRepository echeanceRepository = new EcheanceRepositoryImpl();
         IncidentRepository incidentRepository = new IncidentRepositoryImpl();
 
-        EmployeService employeService = new EmployeServiceImpl(employeRepository);
-        ProfessionnelService professionnelService = new ProfessionnelServiceImpl(professionnelRepository);
+        EmployeService employeService = new EmployeServiceImpl(employeRepository, personRepository);
+        ProfessionnelService professionnelService = new ProfessionnelServiceImpl(professionnelRepository, personRepository);
         CreditService creditService = new CreditServiceImpl(creditRepository, personRepository, employeService, professionnelService, echeanceRepository);
         EcheanceService echeanceService = new EcheanceServiceImpl(echeanceRepository, creditService, personRepository);
         IncidentService incidentService = new IncidentServiceImpl(incidentRepository, creditService, echeanceService, personRepository);

@@ -50,8 +50,10 @@ public class PersonView {
                         int choix1 = ValidationScanner.getIntegerInput();
                         switch (choix1) {
                             case 1:
+                                this.employeView.deleteView();
                                 break;
                             case 2:
+                                this.professionnelView.deleteView();
                                 break;
                             case 3:
                                 conRole = false;

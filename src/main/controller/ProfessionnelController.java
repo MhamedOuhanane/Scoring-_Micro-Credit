@@ -49,4 +49,18 @@ public class ProfessionnelController {
                 (String) data.get("secteurActivite"), (String) data.get("Activite")
         );
     }
+
+    public String delete(Integer person_id) {
+        Map<String, Object> result = new HashMap<>();
+        try {
+            Boolean delete = this.professionnelService.deleteProfessionnel(person_id);
+            if (delete) {
+                return "🗑️ Client professionnel avec ID " + person_id + " supprimé avec succès.";
+            } else {
+                return "⚠️ Aucun Client professionnel trouvé avec ID " + person_id;
+            }
+        } catch (RuntimeException e) {
+            return "❌ Erreur: " + e.getMessage();
+        }
+    }
 }

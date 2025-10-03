@@ -25,7 +25,7 @@ public class EmployeRepositoryImp  implements EmployeRepository {
     public Optional<Employe> insertEmploye(Employe employe) {
         String insertQuery = "INSERT INTO employe (id, salaire, anciennete, poste, typeContrat, secteur) VALUES (?, ?, ?, ?, ?, ?)";
         try {
-            Person person = personRepository.insertPerson(employe).orElseThrow(RuntimeException::new);
+            Person person = personRepository.insertPerson(employe).orElseThrow(() -> new RuntimeException("Impossible d'ajouter ce person"));
             PreparedStatement pstmt = conn.prepareStatement(insertQuery);
             pstmt.setInt(1, person.getId());
             pstmt.setDouble(2, employe.getSalaire());
@@ -36,7 +36,7 @@ public class EmployeRepositoryImp  implements EmployeRepository {
 
             int rowsAff = pstmt.executeUpdate();
             if (rowsAff > 0) {
-                Employe newEmploye = this.findEmploye(person.getId()).orElseThrow(RuntimeException::new);
+                Employe newEmploye = this.findEmploye(person.getId()).orElseThrow(() -> new RuntimeException("Aucun employe trouvé avec l'id: " + person.getId()));
 
                 return Optional.of(newEmploye);
             }
@@ -50,7 +50,7 @@ public class EmployeRepositoryImp  implements EmployeRepository {
     public Optional<Employe> findEmploye(Integer id) {
         String findQurey = "SELECT * FROM employe WHERE id = ?";
         try {
-            Person person = personRepository.findPerson(id).orElseThrow(RuntimeException::new);
+            Person person = personRepository.findPerson(id).orElseThrow(() -> new RuntimeException("Aucun person trouvé avec l'id: " + id));
             Employe employe = new Employe(person.getId(), person.getNom(), person.getPrenom(), person.getEmail(), person.getDateNaissance(), person.getVille(), person.getNombreEnfants(), person.getInvestissement(), person.getPlacement(), person.getSituationFamiliale(), person.getCreatedAt(), person.getScore(), person.getRole());
             PreparedStatement pstmt = conn.prepareStatement(findQurey);
             pstmt.setInt(1, id);
@@ -94,7 +94,7 @@ public class EmployeRepositoryImp  implements EmployeRepository {
         updateEmpQueryStr += " WHERE id = ?";
 
         try {
-            if (updatePerson) personRepository.updatePerson(employe, updatesPerson).orElseThrow(RuntimeException::new);
+            if (updatePerson) personRepository.updatePerson(employe, updatesPerson).orElseThrow(() -> new RuntimeException("Impossible de modifier ce person d'id: " + employe.getId()));
             PreparedStatement pstmt = conn.prepareStatement(updateEmpQueryStr);
             i = 1;
             for (String key : updates.keySet()) {
@@ -142,23 +142,6 @@ public class EmployeRepositoryImp  implements EmployeRepository {
                         salaire, anciennete, poste, typeContrat, secteur));
             }
             return employes;
-        } catch (SQLException e) {
-            throw new RuntimeException(e.getMessage(), e);
-        }
-    }
-
-    @Override
-    public Boolean deleteEmploye(Employe employe) {
-        String deleteQuery = "DELETE FROM employe WHERE id = ?";
-        try {
-            boolean deletePerson = personRepository.deletePerson(employe);
-            if (deletePerson) {
-                PreparedStatement pstmt = conn.prepareStatement(deleteQuery);
-                pstmt.setInt(1, employe.getId());
-                int rowsAff = pstmt.executeUpdate();
-                return rowsAff > 0;
-            }
-            return false;
         } catch (SQLException e) {
             throw new RuntimeException(e.getMessage(), e);
         }

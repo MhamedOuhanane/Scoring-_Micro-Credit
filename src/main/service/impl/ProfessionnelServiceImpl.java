@@ -1,9 +1,9 @@
 package main.service.impl;
 
 import main.model.Professionnel;
+import main.repository.interfaces.PersonRepository;
 import main.repository.interfaces.ProfessionnelRepository;
 import main.service.interfaces.ProfessionnelService;
-import main.utils.DatabaseException;
 
 import java.util.List;
 import java.util.Map;
@@ -11,9 +11,11 @@ import java.util.stream.Collectors;
 
 public class ProfessionnelServiceImpl implements ProfessionnelService {
     private final ProfessionnelRepository professionnelRepository;
+    private final PersonRepository personRepository;
 
-    public ProfessionnelServiceImpl(ProfessionnelRepository professionnelRepository) {
+    public ProfessionnelServiceImpl(ProfessionnelRepository professionnelRepository, PersonRepository personRepository) {
         this.professionnelRepository = professionnelRepository;
+        this.personRepository = personRepository;
     }
 
     @Override
@@ -23,7 +25,7 @@ public class ProfessionnelServiceImpl implements ProfessionnelService {
             return professionnelRepository.insertProfessionnel(professionnel)
                     .orElseThrow(() -> new RuntimeException("Impossible d'ajouter l'professionnel: " + professionnel.getNom() + professionnel.getPrenom()));
         } catch (RuntimeException e) {
-            throw new DatabaseException(e.getMessage(), e);
+            throw new RuntimeException(e.getMessage(), e);
         }
     }
 
@@ -62,7 +64,7 @@ public class ProfessionnelServiceImpl implements ProfessionnelService {
                     })
                     .collect(Collectors.toList());
         } catch (RuntimeException e) {
-            throw new DatabaseException(e.getMessage(), e);
+            throw new RuntimeException(e.getMessage(), e);
         }
     }
 
@@ -71,9 +73,9 @@ public class ProfessionnelServiceImpl implements ProfessionnelService {
         if (id == null) throw new  IllegalArgumentException("L'id de person ne peut pas être null");
         try {
             Professionnel professionnel = this.findProfessionnel(id);
-            return professionnelRepository.deleteProfessionnel(professionnel);
+            return personRepository.deletePerson(professionnel);
         } catch (RuntimeException e) {
-            throw new DatabaseException(e.getMessage(), e);
+            throw new RuntimeException(e.getMessage(), e);
         }
     }
 }

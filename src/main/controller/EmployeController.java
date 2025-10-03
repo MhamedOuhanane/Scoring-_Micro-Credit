@@ -36,6 +36,20 @@ public class EmployeController {
         }
     }
 
+    public String delete(Integer person_id) {
+        Map<String, Object> result = new HashMap<>();
+        try {
+            Boolean delete = this.employeService.deleteEmploye(person_id);
+            if (delete) {
+                return "🗑️ Employe avec ID " + person_id + " supprimé avec succès.";
+            } else {
+                return "⚠️ Aucun Employe trouvé avec ID " + person_id;
+            }
+        } catch (RuntimeException e) {
+            return "❌ Erreur: " + e.getMessage();
+        }
+    }
+
     private Employe instancedEmp(Map<String , Object> data) {
         return new Employe(
                 (String) data.get("nom"), (String) data.get("prenom"),

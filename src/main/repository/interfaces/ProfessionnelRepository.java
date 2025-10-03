@@ -11,5 +11,4 @@ public interface ProfessionnelRepository {
     Optional<Professionnel> findProfessionnel(Integer id);
     Optional<Professionnel> updateProfessionnel(Professionnel prof, Map<String, Object> updates);
     List<Professionnel> selectProfessionnels();
-    Boolean deleteProfessionnel(Professionnel professionnel);
 }

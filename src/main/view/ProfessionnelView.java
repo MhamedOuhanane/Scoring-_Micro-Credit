@@ -69,4 +69,12 @@ public class ProfessionnelView {
         } else if (result.get("erreur") != "") System.out.println(result.get("erreur"));
 
     }
+
+    public void deleteView() {
+        System.out.println("\n+--+--+ Supprimer un Client +--+--+");
+        System.out.print("🔹Saisir Id de Client: ");
+        Integer id = ValidationScanner.getIntegerInput();
+
+        System.out.println(this.professionnelController.delete(id));
+    }
 }
