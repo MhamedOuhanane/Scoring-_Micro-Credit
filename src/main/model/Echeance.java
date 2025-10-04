@@ -3,6 +3,7 @@ package main.model;
 import main.enums.StatutPaiement;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Echeance {
     private Integer id;
@@ -75,5 +76,15 @@ public class Echeance {
 
     public void setCredit_id(Integer credit_id) {
         this.credit_id = credit_id;
+    }
+
+    @Override
+    public String toString() {
+        return "📄 Echéance numero: " + this.id
+                + " | 📅 Date échéance: " + (this.dateEcheance != null ? this.dateEcheance.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) : "N/A")
+                + " | 💵 Mensualité: " + this.mensualite + " MAD"
+                + " | 🗓️ Date paiement: " + (this.datePaiement != null ? this.datePaiement.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) : "N/A")
+                + " | " + (this.statutPaiement != null ? this.statutPaiement : "❌ Non payé")
+                + " | 💳 Crédit ID: " + this.credit_id;
     }
 }

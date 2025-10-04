@@ -3,6 +3,7 @@ package main.model;
 import main.enums.EnumDecision;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Credit {
     private Integer id;
@@ -138,4 +139,18 @@ public class Credit {
             this.tauxInteret = 0.4;
         }
     }
+
+    @Override
+    public String toString() {
+        return "💳 Credit numero: " + this.id
+                + " | 📅 Date: " + (this.dateCredit != null ? this.dateCredit.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) : "N/A")
+                + " | 💰 Montant demandé: " + this.montantDemande + " MAD"
+                + " | 🏦 Montant octroyé: " + this.montantOctroye + " MAD"
+                + " | %️⃣ Taux intérêt: " + this.tauxInteret
+                + " | ⏳ Durée: " + this.dureeenMois + " mois"
+                + " | 🏷️ Type de crédit: " + this.typeCredit
+                + " | ✅ Décision: " + (this.decision != null ? this.decision : "N/A")
+                + " | 🧑 Personne ID: " + this.person_id;
+    }
+
 }

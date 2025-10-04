@@ -6,6 +6,8 @@ import main.model.Credit;
 import main.repository.interfaces.CreditRepository;
 
 import java.sql.*;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -78,6 +80,15 @@ public class CreditRepositoryImpl implements CreditRepository {
         try (PreparedStatement pstmt = conn.prepareStatement(updateQuery.toString())){
             i = 1;
             for (Object value : updates.values()) {
+                if (value instanceof Enum) {
+                    value = value.toString();
+                } else if (value instanceof LocalDate) {
+                    value = Date.valueOf((LocalDate) value);
+                } else if (value instanceof LocalDateTime) {
+                    value = Timestamp.valueOf((LocalDateTime) value);
+                } else if (value instanceof Boolean) {
+                    value = ((Boolean) value) ? 1 : 0;
+                }
                 pstmt.setObject(i++, value);
             }
             pstmt.setInt(i, credit.getId());

@@ -65,4 +65,14 @@ public class Incident {
     public void setEcheance_id(Integer echeance_id) {
         this.echeance_id = echeance_id;
     }
+
+    @Override
+    public String toString() {
+        return "📜 Incident (historique): " + (id != null ? id : "N/A")
+                + " | 🕒 Date: " + (dateIncident != null ? dateIncident.format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) : "N/A")
+                + " | 📊 Score: " + (score != null ? score : "N/A")
+                + " | 🔄 Type d'événement: " + (typeIncident != null ? typeIncident : "N/A")
+                + " | 💳 Échéance ID: " + (echeance_id != null ? echeance_id : "N/A");
+    }
+
 }

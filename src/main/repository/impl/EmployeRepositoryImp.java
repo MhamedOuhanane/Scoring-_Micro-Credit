@@ -9,10 +9,8 @@ import main.model.Person;
 import main.repository.interfaces.EmployeRepository;
 import main.repository.interfaces.PersonRepository;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -98,7 +96,12 @@ public class EmployeRepositoryImp  implements EmployeRepository {
             PreparedStatement pstmt = conn.prepareStatement(updateEmpQueryStr);
             i = 1;
             for (String key : updates.keySet()) {
-                if (attributesAccount.get("employe").contains(key)) pstmt.setObject(i++, updates.get(key));
+                Object value = updates.get(key);
+                if (value instanceof Enum) updates.put(key, value.toString());
+                else if (value instanceof LocalDate) updates.put(key, Date.valueOf((LocalDate) value));
+                else if (value instanceof LocalDateTime) updates.put(key, Timestamp.valueOf((LocalDateTime) value));
+                else if (value instanceof Boolean) updates.put(key, ((Boolean) value) ? 1 : 0);
+                if (attributesAccount.get("employe").contains(key)) pstmt.setObject(i++, value);
             }
             pstmt.setInt(i, employe.getId());
             int rowsAff = pstmt.executeUpdate();

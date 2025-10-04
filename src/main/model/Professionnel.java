@@ -72,4 +72,21 @@ public class Professionnel extends Person{
     public void setActivite(String activite) {
         Activite = activite;
     }
+
+    @Override
+    public String toString() {
+        return "👤 Professionnel: " + getNom() + " " + getPrenom()
+                + " | 📧 Email: " + getEmail()
+                + " | 📅 Date Naissance: " + (getDateNaissance() != null ? getDateNaissance() : "N/A")
+                + " | 🌆 Ville: " + getVille()
+                + " | 👶 Enfants: " + getNombreEnfants()
+                + " | 💰 Revenu: " + (revenu != null ? revenu + " MAD" : "N/A")
+                + " | 🏷️ Secteur: " + (secteurActivite != null ? secteurActivite : "N/A")
+                + " | 🛠️ Activité: " + (Activite != null ? Activite : "N/A")
+                + " | 🆔 Immatriculation: " + (immatriculationFiscale != null ? immatriculationFiscale : "N/A")
+                + " | 💼 Rôle: " + (getRole() != null ? getRole() : "N/A")
+                + " | 👪 Situation familiale: " + (getSituationFamiliale() != null ? getSituationFamiliale() : "N/A")
+                + " | 📈 Score: " + getScore();
+    }
+
 }

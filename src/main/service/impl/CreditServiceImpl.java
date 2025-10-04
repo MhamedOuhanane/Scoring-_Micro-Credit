@@ -4,11 +4,9 @@ import main.enums.EnumDecision;
 import main.enums.StatutPaiement;
 import main.model.Credit;
 import main.model.Echeance;
-import main.model.Employe;
 import main.model.Person;
 import main.repository.interfaces.*;
 import main.service.interfaces.CreditService;
-import main.service.interfaces.EcheanceService;
 import main.service.interfaces.EmployeService;
 import main.service.interfaces.ProfessionnelService;
 
@@ -82,15 +80,7 @@ public class CreditServiceImpl implements CreditService {
             credit.generatedDureeMois(credit.getMontantOctroye());
 
             credit = creditRepository.insertCredit(credit).orElseThrow(() -> new RuntimeException("Impossiple de l'insertion ce credit"));
-            if (credit.getDecision().equals(EnumDecision.ACCORDIMMEDIAT)) {
-                Double montant = credit.getMontantOctroye() + credit.getMontantOctroye() * credit.getTauxInteret();
-                Double mensualite = ((int) (montant / credit.getDureeenMois())) + 1.;
-                for (int i = 1; i <= credit.getDureeenMois(); i++) {
-                    Echeance echeance = new Echeance(credit.getDateCredit().plusMonths(i), mensualite, null, StatutPaiement.PENDING, credit.getId());
-                    echeance = echeanceRepository.insertEcheance(echeance)
-                            .orElseThrow(() -> new RuntimeException("Impossible d'ajouter d'echeance"));
-                }
-            }
+            this.validerCredit(credit);
             return credit;
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage(), e);
@@ -113,9 +103,13 @@ public class CreditServiceImpl implements CreditService {
         if (id == null) throw new  IllegalArgumentException("L'id credit ne peut pas être null");
         if (update.isEmpty()) throw new  RuntimeException("Les modifications ne peut pas être vide");
         try {
+            boolean validation = update.containsKey("decision") && update.get("decision").equals(EnumDecision.ACCORDIMMEDIAT);
             Credit credit = this.findCredit(id);
-            return creditRepository.updateCredit(credit, update)
+            credit = creditRepository.updateCredit(credit, update)
                     .orElseThrow(() -> new RuntimeException("Impossible de modifier le credit d'id: " + id));
+
+            if (validation) this.validerCredit(credit);
+            return credit;
         } catch (RuntimeException e) {
             throw new RuntimeException(e.getMessage(), e);
         }
@@ -157,6 +151,18 @@ public class CreditServiceImpl implements CreditService {
                     .collect(Collectors.toList());
         } catch (RuntimeException e) {
             throw new RuntimeException(e.getMessage(), e);
+        }
+    }
+
+    private void validerCredit(Credit credit) {
+        if (credit.getDecision().equals(EnumDecision.ACCORDIMMEDIAT)) {
+            Double montant = credit.getMontantOctroye() + credit.getMontantOctroye() * credit.getTauxInteret();
+            Double mensualite = ((int) (montant / credit.getDureeenMois())) + 1.;
+            for (int i = 1; i <= credit.getDureeenMois(); i++) {
+                Echeance echeance = new Echeance(credit.getDateCredit().plusMonths(i), mensualite, null, StatutPaiement.PENDING, credit.getId());
+                echeance = echeanceRepository.insertEcheance(echeance)
+                        .orElseThrow(() -> new RuntimeException("Impossible d'ajouter d'echeance"));
+            }
         }
     }
 

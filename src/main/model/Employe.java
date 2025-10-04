@@ -81,4 +81,22 @@ public class Employe extends Person{
     public void setSecteur(EnumSecteur secteur) {
         this.secteur = secteur;
     }
+
+    @Override
+    public String toString() {
+        return "👨‍💼 Employé: " + getNom() + " " + getPrenom()
+                + " | 📧 Email: " + getEmail()
+                + " | 📅 Date Naissance: " + (getDateNaissance() != null ? getDateNaissance() : "N/A")
+                + " | 🌆 Ville: " + getVille()
+                + " | 👶 Enfants: " + getNombreEnfants()
+                + " | 💰 Salaire: " + (salaire != null ? salaire + " MAD" : "N/A")
+                + " | ⏳ Ancienneté: " + (anciennete != null ? anciennete + " ans" : "N/A")
+                + " | 🏢 Poste: " + (poste != null ? poste : "N/A")
+                + " | 📄 Type contrat: " + (typeContrat != null ? typeContrat : "N/A")
+                + " | 🏷️ Secteur: " + (secteur != null ? secteur : "N/A")
+                + " | 💼 Rôle: " + (getRole() != null ? getRole() : "N/A")
+                + " | 👪 Situation familiale: " + (getSituationFamiliale() != null ? getSituationFamiliale() : "N/A")
+                + " | 📈 Score: " + getScore();
+    }
+
 }
