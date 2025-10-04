@@ -2,7 +2,11 @@ package main.controller;
 
 import main.enums.EnumDecision;
 import main.model.Credit;
+import main.model.Echeance;
+import main.model.Incident;
 import main.service.interfaces.CreditService;
+import main.service.interfaces.EcheanceService;
+import main.service.interfaces.IncidentService;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -12,9 +16,11 @@ import java.util.stream.Collectors;
 
 public class CreditController {
     private final CreditService creditService;
+    private final IncidentService incidentService;
 
-    public CreditController(CreditService creditService) {
+    public CreditController(CreditService creditService, IncidentService incidentService) {
         this.creditService = creditService;
+        this.incidentService = incidentService;
     }
 
     public Map<String, Object> create(Map<String, Object> data) {
@@ -66,10 +72,10 @@ public class CreditController {
     }
 
     public String getAllCredit() {
-        Map<String, Object> result = new HashMap<>();
         try {
             List<Credit> credits = this.creditService.getAllCredits();
-            StringBuilder list = new StringBuilder("✅ trouver les credits qui need validation: ");
+            if (credits.isEmpty()) return  "⚠️ Aucun credit trouvé dans le systeme";
+            StringBuilder list = new StringBuilder("✅ trouver tous les credits: ");
             for (Credit credit : credits ) {
                 list.append("\n ").append(credit.toString());
             }
@@ -85,15 +91,20 @@ public class CreditController {
             List<Credit> credits = this.creditService.getAllCredits().stream()
                     .filter(credit -> credit.getDecision().equals(EnumDecision.ETUDEMANUELLE))
                     .collect(Collectors.toList());
+            result.put("credits", credits);
+            result.put("message", "⚠️ Aucun credit trouvé dans le systeme");
+            result.put("erreur", "");
+            if (credits.isEmpty()) return  result;
             StringBuilder list = new StringBuilder("✅ trouver les credits qui need validation: ");
             for (Credit credit : credits ) {
                 list.append("\n ").append(credit.toString());
             }
             result.put("message", list.toString());
-            result.put("credits", credits);
             return result;
         } catch (RuntimeException e) {
             result.put("erreur", "❌ Erreur: " + e.getMessage());
+            result.put("message", "");
+            result.put("credits", "");
             return result;
         }
     }
@@ -104,4 +115,32 @@ public class CreditController {
         );
     }
 
+    public String getEcheances(Integer id) {
+        try {
+            List<Echeance> echeances = this.creditService.selectCreditEcheances(id);
+            if (echeances.isEmpty()) return  "⚠️ Aucun echeance trouvé pour ce credit";
+            StringBuilder list = new StringBuilder("✅ trouver les Echeance de ce credit: ");
+            for (Echeance echeance : echeances ) {
+                list.append("\n ").append(echeance.toString());
+            }
+            return list.toString();
+        } catch (RuntimeException e) {
+            return "❌ Erreur: " + e.getMessage();
+        }
+    }
+
+    public String getIncedents(Integer id) {
+        try {
+            List<Incident> incidents = this.incidentService.getCreditIncidents(id);
+            if (incidents.isEmpty()) return  "⚠️ Aucun incident trouvé pour ce credit";
+            StringBuilder list = new StringBuilder("✅ trouver les Incident de ce credit: ");
+            for (Incident incident : incidents ) {
+                list.append("\n ").append(incident.toString());
+            }
+            return list.toString();
+        } catch (RuntimeException e) {
+            return "❌ Erreur: " + e.getMessage();
+        }
+
+    }
 }

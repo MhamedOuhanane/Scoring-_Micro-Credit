@@ -40,11 +40,13 @@ public class CreditView {
                     this.validCredit();
                     break;
                 case 4:
-                    this.affichage();
+                    this.affichageView();
                     break;
                 case 5:
+                    this.getEcheances();
                     break;
                 case 6:
+                    getIncidents();
                     break;
                 case 7:
                     connection = false;
@@ -123,8 +125,23 @@ public class CreditView {
         System.out.println(this.creditController.find(id));
     }
 
-    private void affichage() {
+    private void affichageView() {
         System.out.println("\n+--+--+ Affichage des Credits +--+--+");
         System.out.println(this.creditController.getAllCredit());
+    }
+
+    private void getEcheances() {
+        System.out.println("\n+--+--+ Afficher les Echecances d'un Credit +--+--+");
+        System.out.print("🔹Saisir Id de Credit: ");
+        Integer id = ValidationScanner.getIntegerInput();
+        System.out.println(this.creditController.getEcheances(id));
+
+    }
+
+    private void getIncidents() {
+        System.out.println("\n+--+--+ Afficher les Incidents d'un Credit +--+--+");
+        System.out.print("🔹Saisir Id de Credit: ");
+        Integer id = ValidationScanner.getIntegerInput();
+        System.out.println(this.creditController.getIncedents(id));
     }
 }

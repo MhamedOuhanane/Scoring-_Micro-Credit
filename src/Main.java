@@ -36,7 +36,7 @@ public class Main {
 
         EmployeController employeController = new EmployeController(employeService);
         ProfessionnelController professionnelController = new ProfessionnelController(professionnelService);
-        CreditController creditController = new CreditController(creditService);
+        CreditController creditController = new CreditController(creditService, incidentService);
 
         EmployeView employeView = new EmployeView(employeController);
         ProfessionnelView professionnelView = new ProfessionnelView(professionnelController);
