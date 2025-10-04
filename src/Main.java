@@ -42,7 +42,7 @@ public class Main {
         ProfessionnelView professionnelView = new ProfessionnelView(professionnelController);
         PersonView personView = new PersonView(employeView, professionnelView);
         CreditView creditView = new CreditView(creditController);
-        EcheanceController echeanceController = new EcheanceController(echeanceService);
+        EcheanceController echeanceController = new EcheanceController(echeanceService, personService);
 
         // Schedules
         echeanceController.scheduleTraitementDate();

@@ -1,6 +1,7 @@
 package main.controller;
 
 import main.service.interfaces.EcheanceService;
+import main.service.interfaces.PersonService;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -10,9 +11,11 @@ import java.util.concurrent.TimeUnit;
 
 public class EcheanceController {
     private final EcheanceService echeanceService;
+    private final PersonService personService;
 
-    public EcheanceController(EcheanceService echeanceService) {
+    public EcheanceController(EcheanceService echeanceService, PersonService personService) {
         this.echeanceService = echeanceService;
+        this.personService = personService;
     }
 
     public void scheduleTraitementDate() {
@@ -23,10 +26,11 @@ public class EcheanceController {
         schedule.scheduleAtFixedRate(() -> {
             try {
                 this.echeanceService.traitementEcheance();
+                this.personService.traitmentAnciennete();
             } catch (RuntimeException e) {
                 System.out.println("❌ Erreur: " + e.getMessage());
             }
-        }, 0, 10, TimeUnit.SECONDS);
+        }, initialDelay, period, TimeUnit.SECONDS);
     }
 
     private Long initialeDelay() {

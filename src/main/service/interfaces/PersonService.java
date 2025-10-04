@@ -7,4 +7,5 @@ import java.util.Map;
 public interface PersonService {
     Person findPerson(Integer id);
     Person updatePerson(Integer id, Map<String , Object> updates);
+    void traitmentAnciennete();
 }

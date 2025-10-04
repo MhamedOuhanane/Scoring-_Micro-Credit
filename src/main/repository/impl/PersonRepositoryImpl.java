@@ -2,16 +2,18 @@ package main.repository.impl;
 
 import main.config.DatabaseConfig;
 import main.enums.EnumRole;
+import main.enums.EnumSecteur;
 import main.enums.EnumSitFam;
+import main.model.Employe;
 import main.model.Person;
 import main.repository.interfaces.PersonRepository;
 import main.utils.DatabaseException;
 
 import java.sql.*;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class PersonRepositoryImpl implements PersonRepository {
     private final Connection conn = DatabaseConfig.getInstance().getConnection();
@@ -78,6 +80,36 @@ public class PersonRepositoryImpl implements PersonRepository {
             return Optional.empty();
         } catch (SQLException | RuntimeException e) {
             throw new DatabaseException(e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public List<Person> selectPersons() {
+        String selectQurey = "SELECT * FROM person ";
+        try (PreparedStatement pstmt = conn.prepareStatement(selectQurey)){
+            ResultSet resultSet = pstmt.executeQuery();
+            List<Person> persons = new ArrayList<>();
+            while (resultSet.next()) {
+                Integer id = resultSet.getInt("id");
+                String nom = resultSet.getString("nom");
+                String prenom = resultSet.getString("prenom");
+                String email = resultSet.getString("email");
+                LocalDate dateNaissance = resultSet.getDate("dateNaissance").toLocalDate();
+                String ville = resultSet.getString("ville");
+                Integer nombreEnfants = resultSet.getInt("nombreEnfants");
+                Boolean investissement = resultSet.getBoolean("investissement");
+                Boolean placement = resultSet.getBoolean("placement");
+                EnumSitFam situationFamiliale = EnumSitFam.valueOf(resultSet.getString("situationFamiliale"));
+                LocalDateTime createdAt = resultSet.getTimestamp("createdAt").toLocalDateTime();
+                Integer score = resultSet.getInt("score");
+                EnumRole role = EnumRole.valueOf(resultSet.getString("role"));
+
+                persons.add(new Person(id, nom, prenom, email, dateNaissance, ville, nombreEnfants,
+                        investissement, placement, situationFamiliale, createdAt, score, role));
+            }
+            return persons;
+        } catch (SQLException e) {
+            throw new RuntimeException(e.getMessage(), e);
         }
     }
 

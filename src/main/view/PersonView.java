@@ -242,6 +242,7 @@ public class PersonView {
             }
         }
         dataPerson.put("createdAt", LocalDateTime.now());
+        score += 5;
         dataPerson.put("score", score);
         if (dataPerson.get("role") == EnumRole.EMPLOYE) employeView.createView(dataPerson);
         else this.professionnelView.createView(dataPerson);
