@@ -44,7 +44,7 @@ public class PersonView {
                         System.out.println("\n🔹 Choisissez le rôle Role: ");
                         System.out.println("1. 👨‍💼 Employé");
                         System.out.println("2. 💼 Professionnel");
-                        System.out.println("6. 🔙 Quitter");
+                        System.out.println("3. 🔙 Quitter");
                         System.out.print("Choix : ");
 
                         int choix1 = ValidationScanner.getIntegerInput();
@@ -69,7 +69,7 @@ public class PersonView {
                         System.out.println("\n🔹 Choisissez le rôle Role: ");
                         System.out.println("1. 👨‍💼 Employé");
                         System.out.println("2. 💼 Professionnel");
-                        System.out.println("6. 🔙 Quitter");
+                        System.out.println("3. 🔙 Quitter");
                         System.out.print("Choix : ");
 
                         int choix1 = ValidationScanner.getIntegerInput();
@@ -94,7 +94,7 @@ public class PersonView {
                         System.out.println("\n🔹 Choisissez le rôle Role: ");
                         System.out.println("1. 👨‍💼 Employé");
                         System.out.println("2. 💼 Professionnel");
-                        System.out.println("6. 🔙 Quitter");
+                        System.out.println("3. 🔙 Quitter");
                         System.out.print("Choix : ");
 
                         int choix1 = ValidationScanner.getIntegerInput();
@@ -116,7 +116,7 @@ public class PersonView {
                         System.out.println("\n🔹 Choisissez le rôle Role: ");
                         System.out.println("1. 👨‍💼 Employé");
                         System.out.println("2. 💼 Professionnel");
-                        System.out.println("6. 🔙 Quitter");
+                        System.out.println("3. 🔙 Quitter");
                         System.out.print("Choix : ");
 
                         int choix1 = ValidationScanner.getIntegerInput();
@@ -139,7 +139,7 @@ public class PersonView {
                         System.out.println("\n🔹 Choisissez le rôle Role: ");
                         System.out.println("1. 👨‍💼 Employé");
                         System.out.println("2. 💼 Professionnel");
-                        System.out.println("6. 🔙 Quitter");
+                        System.out.println("3. 🔙 Quitter");
                         System.out.print("Choix : ");
 
                         int choix1 = ValidationScanner.getIntegerInput();
