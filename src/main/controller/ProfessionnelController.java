@@ -38,16 +38,17 @@ public class ProfessionnelController {
         }
     }
 
-    private Professionnel instancedProff(Map<String , Object> data) {
-        return new Professionnel(
-                (String) data.get("nom"), (String) data.get("prenom"), (String) data.get("email"),
-                (LocalDate) data.get("dateNaissance"), (String) data.get("ville"),
-                (Integer) data.get("nombreEnfants"), (Boolean) data.get("investissement"),
-                (Boolean) data.get("placement"), (EnumSitFam) data.get("situationFamiliale"),
-                (LocalDateTime) data.get("createdAt"), (Integer) data.get("score"),
-                (EnumRole) data.get("role"),(Double) data.get("revenu"), (Double) data.get("immatriculationFiscale"),
-                (String) data.get("secteurActivite"), (String) data.get("Activite")
-        );
+    public String find(Integer id) {
+        try {
+            Professionnel professionnel = this.professionnelService.findProfessionnel(id);
+            if (professionnel != null) {
+                return professionnel.toString();
+            } else {
+                return "⚠️ Aucun Client professionnel trouvé avec ID " + id;
+            }
+        } catch (RuntimeException e) {
+            return "❌ Erreur: " + e.getMessage();
+        }
     }
 
     public String delete(Integer person_id) {
@@ -62,5 +63,17 @@ public class ProfessionnelController {
         } catch (RuntimeException e) {
             return "❌ Erreur: " + e.getMessage();
         }
+    }
+
+    private Professionnel instancedProff(Map<String , Object> data) {
+        return new Professionnel(
+                (String) data.get("nom"), (String) data.get("prenom"), (String) data.get("email"),
+                (LocalDate) data.get("dateNaissance"), (String) data.get("ville"),
+                (Integer) data.get("nombreEnfants"), (Boolean) data.get("investissement"),
+                (Boolean) data.get("placement"), (EnumSitFam) data.get("situationFamiliale"),
+                (LocalDateTime) data.get("createdAt"), (Integer) data.get("score"),
+                (EnumRole) data.get("role"),(Double) data.get("revenu"), (Double) data.get("immatriculationFiscale"),
+                (String) data.get("secteurActivite"), (String) data.get("Activite")
+        );
     }
 }

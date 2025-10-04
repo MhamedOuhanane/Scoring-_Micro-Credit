@@ -95,4 +95,12 @@ public class EmployeView {
 
         System.out.println(this.employeController.delete(id));
     }
+
+    public void findView() {
+        System.out.println("\n+--+--+ Trouver un Employe par son Id +--+--+");
+        System.out.print("🔹Saisir Id de Client: ");
+        Integer id = ValidationScanner.getIntegerInput();
+
+        System.out.println(this.employeController.find(id));
+    }
 }

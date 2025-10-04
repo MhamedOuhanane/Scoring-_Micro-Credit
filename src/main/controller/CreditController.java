@@ -35,6 +35,23 @@ public class CreditController {
         }
     }
 
+    public Map<String , Object> update(Integer id, Map<String, Object> updates) {
+        Map<String, Object> result = new HashMap<>();
+        try {
+            Credit credit = this.creditService.updateCredit(id, updates);
+
+            result.put("message", "✅ Les information de ce credit est modifier avec success");
+            result.put("credit", credit);
+            result.put("erreur", "");
+            return result;
+        } catch (RuntimeException e) {
+            result.put("erreur", "❌ Erreur: " + e.getMessage());
+            result.put("credit", null);
+            result.put("message", "");
+            return result;
+        }
+    }
+
     public Map<String , Object> getAllETUDEMANUELLE() {
         Map<String, Object> result = new HashMap<>();
         try {
@@ -53,27 +70,11 @@ public class CreditController {
             return result;
         }
     }
-
-    public Map<String , Object> update(Integer id, Map<String, Object> updates) {
-        Map<String, Object> result = new HashMap<>();
-        try {
-            Credit credit = this.creditService.updateCredit(id, updates);
-
-            result.put("message", "✅ Les information de ce credit est modifier avec success");
-            result.put("credit", credit);
-            result.put("erreur", "");
-            return result;
-        } catch (RuntimeException e) {
-            result.put("erreur", "❌ Erreur: " + e.getMessage());
-            result.put("credit", null);
-            result.put("message", "");
-            return result;
-        }
-    }
     private Credit instancedEmp(Map<String , Object> data) {
         return new Credit(
                 (LocalDateTime) data.get("dateCredit"), (Double) data.get("montantDemande"),
                 (Double) data.get("montantOctroye"), (String) data.get("typeCredit"), (Integer) data.get("person_id")
         );
     }
+
 }

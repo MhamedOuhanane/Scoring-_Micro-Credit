@@ -3,6 +3,7 @@ package main.controller;
 import main.enums.EnumRole;
 import main.enums.EnumSecteur;
 import main.enums.EnumSitFam;
+import main.model.Credit;
 import main.model.Employe;
 import main.service.interfaces.EmployeService;
 
@@ -33,6 +34,19 @@ public class EmployeController {
             result.put("employe", "");
             result.put("message", "");
             return result;
+        }
+    }
+
+    public String find(Integer id) {
+        try {
+            Employe employe = this.employeService.findEmploye(id);
+            if (employe != null) {
+                return employe.toString();
+            } else {
+                return "⚠️ Aucun employe trouvé avec ID " + id;
+            }
+        } catch (RuntimeException e) {
+            return "❌ Erreur: " + e.getMessage();
         }
     }
 

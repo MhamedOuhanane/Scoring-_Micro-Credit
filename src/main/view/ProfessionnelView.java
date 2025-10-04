@@ -77,4 +77,12 @@ public class ProfessionnelView {
 
         System.out.println(this.professionnelController.delete(id));
     }
+
+    public void findView() {
+        System.out.println("\n+--+--+ Trouver un Client Professionnel par son Id +--+--+");
+        System.out.print("🔹Saisir Id de Client: ");
+        Integer id = ValidationScanner.getIntegerInput();
+
+        System.out.println(this.professionnelController.find(id));
+    }
 }

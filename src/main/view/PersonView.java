@@ -75,8 +75,10 @@ public class PersonView {
                         int choix1 = ValidationScanner.getIntegerInput();
                         switch (choix1) {
                             case 1:
+                                this.employeView.findView();
                                 break;
                             case 2:
+                                this.professionnelView.findView();
                                 break;
                             case 3:
                                 conRole1 = false;
