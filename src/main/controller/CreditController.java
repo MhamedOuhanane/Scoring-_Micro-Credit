@@ -143,4 +143,13 @@ public class CreditController {
         }
 
     }
+
+    public Echeance getEcheanceRemb(Integer id) {
+        try {
+            List<Echeance> echeances = this.creditService.selectCreditEcheances(id);
+            return echeances.stream().filter(echeance -> echeance.getDatePaiement() == null).findFirst().orElse(null);
+        } catch (RuntimeException e) {
+            return null;
+        }
+    }
 }

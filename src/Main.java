@@ -39,10 +39,11 @@ public class Main {
         CreditController creditController = new CreditController(creditService, incidentService);
 
         EmployeView employeView = new EmployeView(employeController);
+
         ProfessionnelView professionnelView = new ProfessionnelView(professionnelController);
         PersonView personView = new PersonView(employeView, professionnelView);
-        CreditView creditView = new CreditView(creditController);
         EcheanceController echeanceController = new EcheanceController(echeanceService, personService);
+        CreditView creditView = new CreditView(creditController, echeanceController);
 
         // Schedules
         echeanceController.scheduleTraitementDate();

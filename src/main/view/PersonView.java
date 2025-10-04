@@ -248,5 +248,4 @@ public class PersonView {
         else this.professionnelView.createView(dataPerson);
     }
 
-//    private void payeEch
 }

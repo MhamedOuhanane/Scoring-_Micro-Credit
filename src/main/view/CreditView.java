@@ -1,7 +1,10 @@
 package main.view;
 
 import main.controller.CreditController;
+import main.controller.EcheanceController;
 import main.enums.EnumDecision;
+import main.enums.StatutPaiement;
+import main.model.Echeance;
 import main.utils.ValidationScanner;
 
 import java.time.LocalDateTime;
@@ -10,9 +13,11 @@ import java.util.Map;
 
 public class CreditView {
     private final CreditController creditController;
+    private final EcheanceController echeanceController;
 
-    public CreditView(CreditController creditController) {
+    public CreditView(CreditController creditController, EcheanceController echeanceController) {
         this.creditController = creditController;
+        this.echeanceController = echeanceController;
     }
 
     public void menuCredit() {
@@ -25,30 +30,41 @@ public class CreditView {
             System.out.println("4. Afficher les Credit");
             System.out.println("5. Afficher les Echecances d'un Credit");
             System.out.println("6. Afficher les Incidents d'un Credit");
-            System.out.println("7. Quitter");
+            System.out.println("7. Remboursement de crédit");
+            System.out.println("8. Quitter");
             System.out.print("Choix : ");
 
             int choix = ValidationScanner.getIntegerInput();
             switch (choix) {
                 case 1:
+                    System.out.println("\n+--+--+ Ajouter un Credit +--+--+");
                     this.createView();
                     break;
                 case 2:
                     this.findView();
+                    System.out.println("\n+--+--+ Trouver un Credit par son Id +--+--+");
                     break;
                 case 3:
                     this.validCredit();
+                    System.out.println("\n+--+--+ Validation d'un Client +--+--+");
                     break;
                 case 4:
+                    System.out.println("\n+--+--+ Affichage des Credits +--+--+");
                     this.affichageView();
                     break;
                 case 5:
+                    System.out.println("\n+--+--+ Afficher les Echecances d'un Credit +--+--+");
                     this.getEcheances();
                     break;
                 case 6:
+                    System.out.println("\n+--+--+ Afficher les Incidents d'un Credit +--+--+");
                     getIncidents();
                     break;
                 case 7:
+                    System.out.println("\n+--+--+ Remboursement de crédit +--+--+");
+                    this.remboursementView();
+                    break;
+                case 8:
                     connection = false;
                     break;
                 default:
@@ -79,7 +95,6 @@ public class CreditView {
 
     private void validCredit() {
         Map<String , Object> updates = new HashMap<>();
-        System.out.println("\n+--+--+ Validation d'un Client +--+--+");
         Map<String , Object> result = this.creditController.getAllETUDEMANUELLE();
         if (result.get("message") != "") {
             System.out.println(result.get("message"));
@@ -118,7 +133,6 @@ public class CreditView {
     }
 
     private void findView() {
-        System.out.println("\n+--+--+ Trouver un Credit par son Id +--+--+");
         System.out.print("🔹Saisir Id de Credit: ");
         Integer id = ValidationScanner.getIntegerInput();
 
@@ -126,12 +140,10 @@ public class CreditView {
     }
 
     private void affichageView() {
-        System.out.println("\n+--+--+ Affichage des Credits +--+--+");
         System.out.println(this.creditController.getAllCredit());
     }
 
     private void getEcheances() {
-        System.out.println("\n+--+--+ Afficher les Echecances d'un Credit +--+--+");
         System.out.print("🔹Saisir Id de Credit: ");
         Integer id = ValidationScanner.getIntegerInput();
         System.out.println(this.creditController.getEcheances(id));
@@ -139,9 +151,38 @@ public class CreditView {
     }
 
     private void getIncidents() {
-        System.out.println("\n+--+--+ Afficher les Incidents d'un Credit +--+--+");
         System.out.print("🔹Saisir Id de Credit: ");
         Integer id = ValidationScanner.getIntegerInput();
         System.out.println(this.creditController.getIncedents(id));
+    }
+
+    private void remboursementView() {
+        System.out.print("🔹Saisir Id de Credit: ");
+        Integer id = ValidationScanner.getIntegerInput();
+        System.out.println(this.creditController.getEcheances(id));
+        Echeance echeance = this.creditController.getEcheanceRemb(id);
+        if (echeance != null) {
+            if (echeance.getDateEcheance().isBefore(LocalDateTime.now())) {
+                System.out.print("🔹Saisissez le montant du paiement d'echeance d'ID (" + echeance.getId() + "): ");
+                double mensualite = ValidationScanner.getMontantInput();
+                boolean connec = true;
+                while (connec) {
+                    if (!echeance.getMensualite().equals(mensualite)) {
+                        System.out.print("⚠️ Montant saisi incorrect. Veuillez ressaisir le montant exact de la mensualité: ");
+                        mensualite = ValidationScanner.getMontantInput();
+                    } else connec = false;
+                }
+                Map<String, Object> updates = new HashMap<>();
+                updates.put("mensualite", mensualite);
+                StatutPaiement statutPaiement = echeance.getStatutPaiement();
+                if (statutPaiement.equals(StatutPaiement.PENDING)) statutPaiement = StatutPaiement.PAYEATEMPS;
+                else if (statutPaiement.equals(StatutPaiement.ENRETARD)) statutPaiement = StatutPaiement.PAYEENRETARD;
+                else if (statutPaiement.equals(StatutPaiement.IMPAYENONREGLE)) statutPaiement = StatutPaiement.IMPAYEREGLE;
+                updates.put("statutPaiement", statutPaiement);
+                updates.put("datePaiement", LocalDateTime.now());
+
+                System.out.println(this.echeanceController.update(echeance.getId(), updates));
+            } else System.out.println("⚠️ La date de paiement pour cette échéance n’est pas encore arrivée. Vous ne pouvez pas rembourser avant le " + echeance.getDateEcheance().toLocalDate() + ".");
+        } else System.out.println("ℹ️ Ce crédit ne contient actuellement aucune échéance impayée à rembourser.");
     }
 }

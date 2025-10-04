@@ -59,8 +59,21 @@ public class EcheanceServiceImpl implements EcheanceService {
         if (updates.isEmpty()) throw new  RuntimeException("Les modifications ne peut pas être vide");
         try {
             Echeance echeance = this.findEcheance(echean_id);
-            return echeanceRepository.updateEcheance(echeance, updates)
+            echeance = echeanceRepository.updateEcheance(echeance, updates)
                     .orElseThrow(() -> new RuntimeException("Impossible de modifier le echeance d'id: " + echean_id));
+
+            if (updates.containsKey("datePaiement") && updates.containsKey("statutPaiement")) {
+                Person person = this.personService.findPerson(this.creditService.findCredit(echeance.getCredit_id()).getPerson_id());
+                int score = person.getScore();
+                if (updates.get("statutPaiement").equals(StatutPaiement.PAYEENRETARD)) score += 3;
+                if (updates.get("statutPaiement").equals(StatutPaiement.IMPAYEREGLE)) score += 5;
+
+                score = score < 0 ? 0 : Math.min(score, 100);
+                Map<String , Object> update = new HashMap<>();
+                update.put("score", score);
+                person = personService.updatePerson(person.getId(), update);
+            }
+            return echeance;
         } catch (RuntimeException e) {
             throw new RuntimeException(e.getMessage(), e);
         }
