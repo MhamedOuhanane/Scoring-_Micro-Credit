@@ -32,7 +32,7 @@ public class EcheanceController {
             } catch (RuntimeException e) {
                 System.out.println("❌ Erreur: " + e.getMessage());
             }
-        }, 0, 5, TimeUnit.SECONDS);
+        }, initialDelay, period, TimeUnit.SECONDS);
     }
 
     private Long initialeDelay() {
