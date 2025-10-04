@@ -22,9 +22,10 @@ public class CreditView {
             System.out.println("1. Ajouter un Credit");
             System.out.println("2. Rechercher un Credit par son ID");
             System.out.println("3. Validation des Credits");
-            System.out.println("4. Afficher les Echecances d'un Credit");
-            System.out.println("5. Afficher les Incidents d'un Credit");
-            System.out.println("6. Quitter");
+            System.out.println("4. Afficher les Credit");
+            System.out.println("5. Afficher les Echecances d'un Credit");
+            System.out.println("6. Afficher les Incidents d'un Credit");
+            System.out.println("7. Quitter");
             System.out.print("Choix : ");
 
             int choix = ValidationScanner.getIntegerInput();
@@ -33,13 +34,19 @@ public class CreditView {
                     this.createView();
                     break;
                 case 2:
+                    this.findView();
                     break;
                 case 3:
                     this.validCredit();
                     break;
                 case 4:
+                    this.affichage();
                     break;
                 case 5:
+                    break;
+                case 6:
+                    break;
+                case 7:
                     connection = false;
                     break;
                 default:
@@ -106,5 +113,18 @@ public class CreditView {
                 System.out.println(result1.get("message"));
             } else if (!result1.get("erreur").equals("")) System.out.println(result1.get("erreur"));
         } else if (!result.get("erreur").equals("")) System.out.println(result.get("erreur"));
+    }
+
+    private void findView() {
+        System.out.println("\n+--+--+ Trouver un Credit par son Id +--+--+");
+        System.out.print("🔹Saisir Id de Credit: ");
+        Integer id = ValidationScanner.getIntegerInput();
+
+        System.out.println(this.creditController.find(id));
+    }
+
+    private void affichage() {
+        System.out.println("\n+--+--+ Affichage des Credits +--+--+");
+        System.out.println(this.creditController.getAllCredit());
     }
 }

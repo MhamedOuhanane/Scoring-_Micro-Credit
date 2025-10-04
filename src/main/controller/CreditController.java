@@ -35,6 +35,19 @@ public class CreditController {
         }
     }
 
+    public String find(Integer id) {
+        try {
+            Credit credit = this.creditService.findCredit(id);
+            if (credit != null) {
+                return credit.toString();
+            } else {
+                return "⚠️ Aucun credit trouvé avec ID " + id;
+            }
+        } catch (RuntimeException e) {
+            return "❌ Erreur: " + e.getMessage();
+        }
+    }
+
     public Map<String , Object> update(Integer id, Map<String, Object> updates) {
         Map<String, Object> result = new HashMap<>();
         try {
@@ -49,6 +62,20 @@ public class CreditController {
             result.put("credit", null);
             result.put("message", "");
             return result;
+        }
+    }
+
+    public String getAllCredit() {
+        Map<String, Object> result = new HashMap<>();
+        try {
+            List<Credit> credits = this.creditService.getAllCredits();
+            StringBuilder list = new StringBuilder("✅ trouver les credits qui need validation: ");
+            for (Credit credit : credits ) {
+                list.append("\n ").append(credit.toString());
+            }
+            return list.toString();
+        } catch (RuntimeException e) {
+            return "❌ Erreur: " + e.getMessage();
         }
     }
 
